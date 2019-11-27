@@ -1,4 +1,4 @@
-FROM alpine:3.8
+FROM alpine:3.10
 
 ENV SHADOWSOCKS_VERSION 3.3.3
 ENV SIMPLE_OBFS_VERSION 0.0.5
@@ -16,7 +16,7 @@ RUN apk upgrade --update \
   && curl -sSLO "$SHADOWSOCKS_URL" \
   && tar xfz shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
-  && ./configure --prefix=/usr --disable-documentation \
+  && ./configure --prefix=/usr --disable-documentation --disable-assert --disable-ssp \
   && make && make install \
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
