@@ -1,7 +1,7 @@
 FROM alpine:3.10
 
 ENV SHADOWSOCKS_VERSION 3.3.3
-ENV SIMPLE_OBFS_VERSION 0.0.5
+ENV SIMPLE_OBFS_VERSION 486bebd
 ENV KCPTUN_VERSION 20191127
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$SHADOWSOCKS_VERSION/shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
