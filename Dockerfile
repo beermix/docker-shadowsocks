@@ -23,8 +23,8 @@ RUN apk upgrade --update \
   && cd mbedtls-$MBEDTLS_VERSION \
   && sed -i -e 's|//\(#define MBEDTLS_THREADING_C\)|\1|' -e 's|//\(#define MBEDTLS_THREADING_PTHREAD\)|\1|' include/mbedtls/config.h \
   && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr \
-  && -DUSE_SHARED_MBEDTLS_LIBRARY=ON -DUSE_STATIC_MBEDTLS_LIBRARY=OFF \
-  && -DLINK_WITH_PTHREAD=ON -DENABLE_TESTING=OFF -DENABLE_PROGRAMS=OFF -Wno-dev \
+     -DUSE_SHARED_MBEDTLS_LIBRARY=ON -DUSE_STATIC_MBEDTLS_LIBRARY=OFF \
+     -DLINK_WITH_PTHREAD=ON -DENABLE_TESTING=OFF -DENABLE_PROGRAMS=OFF -Wno-dev \
   && make && make install \
   && cd /tmp \
   && curl -sSLO "$LIBSODIUM_URL" \
@@ -39,7 +39,7 @@ RUN apk upgrade --update \
   && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
   && ./autogen.sh \
   && ./configure --prefix=/usr --disable-documentation --enable-shared \
-  && --enable-system-shared-lib --disable-assert --disable-ssp --disable-silent-rules \
+     --enable-system-shared-lib --disable-assert --disable-ssp --disable-silent-rules \
   && make && make install \
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
