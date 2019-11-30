@@ -14,7 +14,7 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 RUN apk upgrade --update \
   && apk add --virtual .build-deps curl git \
      build-base gcc abuild binutils \
-     pcre-dev c-ares-dev linux-headers libev-dev xmlto asciidoc \
+     pcre-dev c-ares-dev linux-headers libev-dev asciidoc xmlto \
      autoconf automake libtool  \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
