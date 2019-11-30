@@ -30,16 +30,14 @@ RUN apk upgrade --update \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
-  && ./configure --prefix=/usr --enable-minimal --enable-shared  --disable-static --enable-opt \
+  && ./configure --prefix=/usr --enable-minimal --enable-shared --disable-static --enable-opt \
   && make && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
   && tar xfz v$SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
-  && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
-  && ./autogen.sh \
-  && ./configure --prefix=/usr --disable-documentation --enable-shared --disable-static \
-     --enable-system-shared-lib --disable-silent-rules \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 \
+     -DWITH_EMBEDDED_SRC=1 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 -DCMAKE_INSTALL_PREFIX=/usr \
   && make && make install \
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
