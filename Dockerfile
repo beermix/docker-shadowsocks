@@ -14,14 +14,15 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 RUN apk upgrade --update \
   && apk add --virtual .build-deps curl git \
      build-base gcc abuild binutils \
-     pcre-dev c-ares-dev linux-headers libev-dev asciidoc xmlto cmake \
-     autoconf automake libtool  \
+     pcre-dev c-ares-dev linux-headers libev-dev libcorkipset-dev libbloom-dev zlib-dev \
+     asciidoc xmlto cmake \
+     autoconf automake libtool \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
   && tar xfz mbedtls-$MBEDTLS_VERSION-gpl.tgz \
   && cd mbedtls-$MBEDTLS_VERSION \
   && sed -i -e 's|//\(#define MBEDTLS_THREADING_C\)|\1|' -e 's|//\(#define MBEDTLS_THREADING_PTHREAD\)|\1|' include/mbedtls/config.h \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DUSE_SHARED_MBEDTLS_LIBRARY=ON ENABLE_PROGRAMS=OFF -Wno-dev && make && make install \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DUSE_SHARED_MBEDTLS_LIBRARY=ON -DENABLE_PROGRAMS=OFF -Wno-dev && make && make install \
   && cd /tmp \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
@@ -32,7 +33,9 @@ RUN apk upgrade --update \
   && curl -sSLO "$SHADOWSOCKS_URL" \
   && tar xfz shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
-  && ./configure CFLAGS="-march=native -O2 -pipe" --prefix=/usr --disable-documentation \
+  && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
+  && ./autogen.sh \
+  && ./configure CFLAGS="-march=native -O2 -pipe" --prefix=/usr --disable-documentation  --enable-shared --enable-system-shared-lib \
   && make && make install \
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
