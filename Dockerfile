@@ -7,8 +7,8 @@ ENV SIMPLE_OBFS_VERSION 486bebd
 ENV KCPTUN_VERSION 20191127
 ENV MBEDTLS_URL=https://tls.mbed.org/download/mbedtls-$MBEDTLS_VERSION-gpl.tgz
 ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSION-RELEASE/libsodium-$LIBSODIUM_VERSION.tar.gz
-# ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$SHADOWSOCKS_VERSION/shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/v$SHADOWSOCKS_VERSION.tar.gz
+https://github.com/shadowsocks/shadowsocks-libev/archive/v3.3.3.tar.gz
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
@@ -34,7 +34,7 @@ RUN apk upgrade --update \
   && make && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
-  && tar xfz shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz \
+  && tar xfz v$SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
   && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
   && ./autogen.sh \
