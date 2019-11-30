@@ -18,7 +18,7 @@ RUN apk upgrade --update \
   && curl -sSLO "$MBEDTLS_URL" \
   && tar xfz mbedtls-2.16.3-gpl.tgz \
   && cd mbedtls-2.16.3 \
-  && make SHARED=1 CFLAGS=-fPIC && make DESTDIR=/usr install \
+  && make SHARED=1 CFLAGS=-fPIC lib && make DESTDIR=/usr install \
   && cd /tmp \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-1.0.18.tar.gz \
