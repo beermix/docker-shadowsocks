@@ -3,6 +3,7 @@ FROM alpine:edge
 ENV SHADOWSOCKS_VERSION 3.3.3
 ENV SIMPLE_OBFS_VERSION 486bebd
 ENV KCPTUN_VERSION 20191127
+ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$SHADOWSOCKS_VERSION/shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
@@ -12,6 +13,12 @@ RUN apk upgrade --update \
      build-base gcc abuild binutils binutils-doc gcc-doc \
      pcre-dev mbedtls-dev libsodium-dev c-ares-dev linux-headers libev-dev asciidoc xmlto \
      autoconf automake libtool \
+  && cd /tmp \
+   && curl -sSLO "$LIBSODIUM_URL" \
+  && tar xfz libsodium-1.0.18.tar.gz \
+  && cd libsodium-1.0.18 \
+  && ./configure --prefix=/usr --enable-minimal --enable-opt \
+  && make && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
   && tar xfz shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz \
