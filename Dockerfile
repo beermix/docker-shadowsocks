@@ -14,13 +14,14 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 RUN apk upgrade --update \
   && apk add --virtual .build-deps curl git \
      build-base gcc abuild binutils \
-     pcre-dev c-ares-dev linux-headers libev-dev asciidoc xmlto \
+     pcre-dev c-ares-dev linux-headers libev-dev asciidoc xmlto cmake \
      autoconf automake libtool  \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
   && tar xfz mbedtls-$MBEDTLS_VERSION-gpl.tgz \
   && cd mbedtls-$MBEDTLS_VERSION \
-  && make SHARED=1 CFLAGS="-march=native -O3 -pipe -fPIC" lib && make DESTDIR=/usr install \
+  && sed -i -e 's|//\(#define MBEDTLS_THREADING_C\)|\1|' -e 's|//\(#define MBEDTLS_THREADING_PTHREAD\)|\1|' include/mbedtls/config.h \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DUSE_SHARED_MBEDTLS_LIBRARY=ON && make && make install \
   && cd /tmp \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
