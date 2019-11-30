@@ -2,12 +2,12 @@ FROM alpine:edge
 
 ENV MBEDTLS_VERSION 2.16.3
 ENV LIBSODIUM_VERSION 1.0.18
-ENV SHADOWSOCKS_VERSION 3.3.3
+ENV SHADOWSOCKS_VERSION 4261a3de8e343de5ca42a7e5a9bba8643c416c92
 ENV SIMPLE_OBFS_VERSION 486bebd
 ENV KCPTUN_VERSION 20191127
 ENV MBEDTLS_URL=https://tls.mbed.org/download/mbedtls-$MBEDTLS_VERSION-gpl.tgz
 ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSION-RELEASE/libsodium-$LIBSODIUM_VERSION.tar.gz
-ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/v$SHADOWSOCKS_VERSION.tar.gz
+ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/$SHADOWSOCKS_VERSION.tar.gz
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
@@ -34,10 +34,9 @@ RUN apk upgrade --update \
   && make && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
-  && tar xfz v$SHADOWSOCKS_VERSION.tar.gz \
+  && tar xfz $SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 \
-     -DWITH_EMBEDDED_SRC=1 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 -DCMAKE_INSTALL_PREFIX=/usr \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DCMAKE_INSTALL_PREFIX=/usr \
   && make && make install \
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
