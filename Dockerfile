@@ -13,7 +13,7 @@ RUN apk upgrade --update \
   && apk add --virtual .build-deps curl git \
      build-base gcc abuild binutils \
      pcre-dev c-ares-dev linux-headers libev-dev \
-     autoconf automake libtool \
+     autoconf automake libtool python2 \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
   && tar xfz mbedtls-2.16.3-gpl.tgz \
