@@ -18,7 +18,7 @@ RUN apk upgrade --update \
      pcre-dev c-ares-dev linux-headers libev-dev libcorkipset-dev libbloom-dev zlib-dev \
      asciidoc xmlto cmake \
      autoconf automake libtool \
-     apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
+  && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
   && tar xfz mbedtls-$MBEDTLS_VERSION-gpl.tgz \
