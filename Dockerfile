@@ -1,10 +1,12 @@
 FROM alpine:edge
 
+ENV MBEDTLS_VERSION 2.6.13
+ENV LIBSODIUM_VERSION 1.0.18
 ENV SHADOWSOCKS_VERSION 3.3.3
 ENV SIMPLE_OBFS_VERSION 486bebd
 ENV KCPTUN_VERSION 20191127
-ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz
-ENV MBEDTLS_URL=https://tls.mbed.org/download/mbedtls-2.16.3-gpl.tgz
+ENV MBEDTLS_URL=https://tls.mbed.org/download/mbedtls-$MBEDTLS_VERSION-gpl.tgz
+ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSION-RELEASE/libsodium-$LIBSODIUM_VERSION.tar.gz
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$SHADOWSOCKS_VERSION/shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
@@ -13,16 +15,16 @@ RUN apk upgrade --update \
   && apk add --virtual .build-deps curl git \
      build-base gcc abuild binutils \
      pcre-dev c-ares-dev linux-headers libev-dev \
-     autoconf automake libtool python2 \
+     autoconf automake libtool \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
-  && tar xfz mbedtls-2.16.3-gpl.tgz \
-  && cd mbedtls-2.16.3 \
+  && tar xfz mbedtls-$MBEDTLS_VERSION-gpl.tgz \
+  && cd mbedtls-$MBEDTLS_VERSION \
   && make SHARED=1 CFLAGS=-fPIC lib && make DESTDIR=/usr install \
   && cd /tmp \
   && curl -sSLO "$LIBSODIUM_URL" \
-  && tar xfz libsodium-1.0.18.tar.gz \
-  && cd libsodium-1.0.18 \
+  && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
+  && cd libsodium-$LIBSODIUM_VERSION \
   && ./configure --prefix=/usr --enable-minimal --enable-opt --disable-ssp \
   && make && make install \
   && cd /tmp \
