@@ -23,7 +23,7 @@ RUN apk upgrade --update \
   && tar xfz mbedtls-$MBEDTLS_VERSION-gpl.tgz \
   && cd mbedtls-$MBEDTLS_VERSION \
   && sed -i -e 's|//\(#define MBEDTLS_THREADING_C\)|\1|' -e 's|//\(#define MBEDTLS_THREADING_PTHREAD\)|\1|' include/mbedtls/config.h \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DUSE_SHARED_MBEDTLS_LIBRARY=ON -DUSE_STATIC_MBEDTLS_LIBRARY=OFF -DENABLE_TESTING=OFF -DENABLE_PROGRAMS=OFF -Wno-dev \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DUSE_SHARED_MBEDTLS_LIBRARY=ON -DUSE_STATIC_MBEDTLS_LIBRARY=OFF -DLINK_WITH_PTHREAD=ON -DENABLE_TESTING=OFF -DENABLE_PROGRAMS=OFF -Wno-dev \
   && make && make install \
   && cd /tmp \
   && curl -sSLO "$LIBSODIUM_URL" \
