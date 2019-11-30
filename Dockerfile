@@ -23,7 +23,7 @@ RUN apk upgrade --update \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-1.0.18.tar.gz \
   && cd libsodium-1.0.18 \
-  && ./configure --prefix=/usr --enable-minimal --enable-opt \
+  && ./configure --prefix=/usr --enable-minimal --enable-opt --disable-ssp \
   && make && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
