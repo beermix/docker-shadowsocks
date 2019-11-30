@@ -25,13 +25,13 @@ RUN apk upgrade --update \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
-  && ./configure --prefix=/usr --enable-minimal --enable-opt --disable-ssp \
+  && ./configure --prefix=/usr --enable-minimal --enable-opt \
   && make && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
   && tar xfz shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
-  && ./configure CFLAGS="-march=native -O2 -pipe" --prefix=/usr --disable-documentation --disable-assert --disable-ssp \
+  && ./configure CFLAGS="-march=native -O2 -pipe" --prefix=/usr --disable-documentation \
   && make && make install \
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
