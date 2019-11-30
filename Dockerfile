@@ -20,7 +20,7 @@ RUN apk upgrade --update \
   && curl -sSLO "$MBEDTLS_URL" \
   && tar xfz mbedtls-$MBEDTLS_VERSION-gpl.tgz \
   && cd mbedtls-$MBEDTLS_VERSION \
-  && make SHARED=1 CFLAGS=-fPIC lib && make DESTDIR=/usr install \
+  && make SHARED=1 CFLAGS="-march=native -O3 -pipe -fPIC" lib && make DESTDIR=/usr install \
   && cd /tmp \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
@@ -31,7 +31,7 @@ RUN apk upgrade --update \
   && curl -sSLO "$SHADOWSOCKS_URL" \
   && tar xfz shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
-  && ./configure --prefix=/usr --disable-documentation --disable-assert --disable-ssp \
+  && ./configure CFLAGS="-march=native -O2 -pipe" --prefix=/usr --disable-documentation --disable-assert --disable-ssp \
   && make && make install \
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
