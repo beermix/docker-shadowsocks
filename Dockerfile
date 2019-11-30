@@ -15,7 +15,7 @@ RUN apk upgrade --update \
   && apk add --virtual .build-deps curl git cmake \
      build-base gcc abuild binutils \
      pcre-dev c-ares-dev linux-headers libev-dev zlib-dev \
-     autoconf automake libtool \
+     autoconf automake libtool flex bison \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
@@ -36,7 +36,9 @@ RUN apk upgrade --update \
   && curl -sSLO "$SHADOWSOCKS_URL" \
   && tar xfz $SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DCMAKE_INSTALL_PREFIX=/usr \
+  && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
+  && ./autogen.sh \
+  && ./configure --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-silent-rules \
   && make && make install \
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
