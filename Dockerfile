@@ -1,4 +1,4 @@
-FROM alpine:20191114
+FROM alpine:edge
 
 ENV MBEDTLS_VERSION 2.16.3
 ENV LIBSODIUM_VERSION 1.0.18
@@ -11,13 +11,12 @@ ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/v$S
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
-RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories \
-  && apk upgrade --update \
-  && apk add --virtual .build-deps curl git \
+RUN apk upgrade --update \
+  && apk add --virtual .build-deps curl git cmake \
      build-base gcc abuild binutils \
      pcre-dev c-ares-dev linux-headers libev-dev zlib-dev \
-     asciidoc xmlto cmake \
      autoconf automake libtool \
+  && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
   && tar xfz mbedtls-$MBEDTLS_VERSION-gpl.tgz \
