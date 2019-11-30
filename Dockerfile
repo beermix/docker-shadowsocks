@@ -23,14 +23,14 @@ RUN apk upgrade --update \
   && cd mbedtls-$MBEDTLS_VERSION \
   && sed -i -e 's|//\(#define MBEDTLS_THREADING_C\)|\1|' -e 's|//\(#define MBEDTLS_THREADING_PTHREAD\)|\1|' include/mbedtls/config.h \
   && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr \
-     -DUSE_SHARED_MBEDTLS_LIBRARY=ON -DUSE_STATIC_MBEDTLS_LIBRARY=OFF \
-     -DLINK_WITH_PTHREAD=ON -DENABLE_TESTING=OFF -DENABLE_PROGRAMS=OFF -Wno-dev \
+     -DUSE_SHARED_MBEDTLS_LIBRARY=1 -DUSE_STATIC_MBEDTLS_LIBRARY=0 \
+     -DLINK_WITH_PTHREAD=1 -DENABLE_TESTING=0 -DENABLE_PROGRAMS=0 -Wno-dev \
   && make && make install \
   && cd /tmp \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
-  && ./configure --prefix=/usr --enable-minimal --enable-opt --disable-ssp --disable-pie \
+  && ./configure --prefix=/usr --enable-minimal --enable-shared  --disable-static --enable-opt \
   && make && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
@@ -38,8 +38,8 @@ RUN apk upgrade --update \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
   && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
   && ./autogen.sh \
-  && ./configure --prefix=/usr --disable-documentation --enable-shared \
-     --enable-system-shared-lib --disable-assert --disable-ssp --disable-silent-rules \
+  && ./configure --prefix=/usr --disable-documentation --enable-shared --disable-static \
+     --enable-system-shared-lib --disable-silent-rules \
   && make && make install \
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
@@ -47,7 +47,7 @@ RUN apk upgrade --update \
   && git checkout -b v$SIMPLE_OBFS_VERSION \
   && git submodule update --init --recursive \
   && ./autogen.sh \
-  && ./configure --disable-ssp --disable-assert --disable-documentation --disable-silent-rules \
+  && ./configure --disable-documentation --disable-silent-rules \
   && make && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
