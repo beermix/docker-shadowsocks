@@ -1,6 +1,6 @@
 FROM alpine:edge
 
-ENV MBEDTLS_VERSION 2.6.13
+ENV MBEDTLS_VERSION 2.16.3
 ENV LIBSODIUM_VERSION 1.0.18
 ENV SHADOWSOCKS_VERSION 3.3.3
 ENV SIMPLE_OBFS_VERSION 486bebd
@@ -15,7 +15,7 @@ RUN apk upgrade --update \
   && apk add --virtual .build-deps curl git \
      build-base gcc abuild binutils \
      pcre-dev c-ares-dev linux-headers libev-dev \
-     autoconf automake libtool \
+     autoconf automake libtool  \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
   && tar xfz mbedtls-$MBEDTLS_VERSION-gpl.tgz \
