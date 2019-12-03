@@ -30,7 +30,7 @@ RUN apk upgrade --update \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
-  && ./configure --prefix=/usr --enable-minimal --enable-shared --disable-static --enable-opt \
+  && ./configure --prefix=/usr --enable-minimal --enable-shared --disable-static --enable-opt --disable-ssp --disable-pie \
   && make && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
@@ -38,7 +38,7 @@ RUN apk upgrade --update \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
   && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
   && ./autogen.sh \
-  && ./configure --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-silent-rules \
+  && ./configure --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-silent-rules --disable-assert --disable-ssp \
   && make && make install \
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
@@ -46,7 +46,7 @@ RUN apk upgrade --update \
   && git checkout -b v$SIMPLE_OBFS_VERSION \
   && git submodule update --init --recursive \
   && ./autogen.sh \
-  && ./configure --disable-documentation --disable-silent-rules \
+  && ./configure --disable-documentation --disable-silent-rules --disable-assert --disable-ssp \
   && make && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
