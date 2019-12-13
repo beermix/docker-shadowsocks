@@ -10,7 +10,7 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 RUN apk upgrade --update \
   && apk add --virtual .build-deps curl git \
      build-base gcc abuild binutils \
-     pcre-dev mbedtls-dev libsodium-dev c-ares-dev linux-headers libev-dev \
+     pcre-dev mbedtls-dev libsodium-dev c-ares-dev linux-headers libev-dev zlib-dev \
      autoconf automake libtool \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
@@ -19,10 +19,9 @@ RUN apk upgrade --update \
   && ./configure --prefix=/usr --disable-documentation --disable-assert --disable-ssp \
   && make && make install \
   && cd /tmp \
-  && git clone $SIMPLE_OBFS_URL \
+  && git clone --recursive $SIMPLE_OBFS_URL \
   && cd simple-obfs \
-  && git checkout -b v$SIMPLE_OBFS_VERSION \
-  && git submodule update --init --recursive \
+  && git checkout -b $SIMPLE_OBFS_VERSION \
   && ./autogen.sh \
   && ./configure --disable-documentation --disable-assert --disable-ssp \
   && make && make install \
@@ -30,7 +29,7 @@ RUN apk upgrade --update \
   && curl -sSLO $KCPTUN_URL \
   && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
   && mv server_linux_amd64 /usr/bin/kcptun-server \
-  && mv client_linux_amd64 /usr/bin/kcptun-client \  
+  && mv client_linux_amd64 /usr/bin/kcptun-client \
   && runDeps="$( \
       scanelf --needed --nobanner /usr/bin/ss-* /usr/local/bin/obfs-* \
         | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
