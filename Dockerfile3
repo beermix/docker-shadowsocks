@@ -9,14 +9,14 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 
 RUN apk upgrade --update \
   && apk add --virtual .build-deps curl git \
-     build-base gcc abuild binutils binutils-doc gcc-doc \
-     pcre-dev mbedtls-dev libsodium-dev c-ares-dev linux-headers libev-dev asciidoc xmlto \
+     build-base gcc abuild binutils \
+     pcre-dev mbedtls-dev libsodium-dev c-ares-dev linux-headers libev-dev \
      autoconf automake libtool \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
   && tar xfz shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
-  && ./configure --prefix=/usr --disable-documentation \
+  && ./configure --prefix=/usr --disable-documentation --disable-assert --disable-ssp \
   && make && make install \
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
@@ -24,7 +24,7 @@ RUN apk upgrade --update \
   && git checkout -b v$SIMPLE_OBFS_VERSION \
   && git submodule update --init --recursive \
   && ./autogen.sh \
-  && ./configure \
+  && ./configure --disable-documentation --disable-assert --disable-ssp \
   && make && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
