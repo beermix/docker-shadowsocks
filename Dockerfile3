@@ -16,14 +16,14 @@ RUN apk upgrade --update \
   && curl -sSLO "$SHADOWSOCKS_URL" \
   && tar xfz shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
-  && ./configure --prefix=/usr --disable-documentation --disable-assert --disable-ssp \
+  && ./configure --prefix=/usr --disable-documentation --disable-maintainer-mode --disable-dependency-tracking --enable-shared --disable-ssp \
   && make && make install \
   && cd /tmp \
   && git clone --recursive $SIMPLE_OBFS_URL \
   && cd simple-obfs \
   && git checkout -b $SIMPLE_OBFS_VERSION \
   && ./autogen.sh \
-  && ./configure --disable-documentation --disable-assert --disable-ssp \
+  && ./configure --disable-documentation --disable-ssp \
   && make && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
