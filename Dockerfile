@@ -2,9 +2,9 @@ FROM alpine:edge
 
 ENV MBEDTLS_VERSION 2.16.3
 ENV LIBSODIUM_VERSION 1.0.18
-ENV SHADOWSOCKS_VERSION 4261a3de8e343de5ca42a7e5a9bba8643c416c92
+ENV SHADOWSOCKS_VERSION ffc2ea42fc8a4332ffa9b8b022ec86b97a19748c
 ENV SIMPLE_OBFS_VERSION 486bebd
-ENV KCPTUN_VERSION 20191127
+ENV KCPTUN_VERSION 20191219
 ENV MBEDTLS_URL=https://tls.mbed.org/download/mbedtls-$MBEDTLS_VERSION-gpl.tgz
 ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSION-RELEASE/libsodium-$LIBSODIUM_VERSION.tar.gz
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/$SHADOWSOCKS_VERSION.tar.gz
@@ -14,7 +14,7 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 RUN apk upgrade --update \
   && apk add --virtual .build-deps curl git cmake \
      build-base gcc abuild binutils \
-     pcre-dev c-ares-dev linux-headers libev-dev zlib-dev \
+     pcre-dev c-ares-dev linux-headers libev-dev zlib-dev flex bison libcap\
      autoconf automake libtool flex bison \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
