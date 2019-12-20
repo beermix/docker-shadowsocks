@@ -30,7 +30,7 @@ RUN apk upgrade --update \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
-  && ./configure --prefix=/usr --enable-minimal --enable-shared --disable-static --enable-opt --disable-ssp --disable-pie \
+  && ./configure --prefix=/usr --enable-minimal --enable-shared --disable-static --enable-opt --disable-ssp --disable-pie --enable-minimal \
   && make && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
