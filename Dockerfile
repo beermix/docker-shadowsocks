@@ -14,8 +14,8 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 RUN apk upgrade --update \
   && apk add --virtual .build-deps curl git cmake \
      build-base gcc abuild binutils \
-     pcre-dev c-ares-dev linux-headers libev-dev zlib-dev flex bison libcap\
-     autoconf automake libtool flex bison \
+     pcre-dev c-ares-dev linux-headers libev-dev zlib-dev flex bison libcap \
+     autoconf automake libtool \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
