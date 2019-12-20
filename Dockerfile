@@ -40,6 +40,7 @@ RUN apk upgrade --update \
   && ./autogen.sh \
   && ./configure --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-silent-rules --disable-assert --disable-ssp \
   && make && make install \
+  && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
   && cd simple-obfs \
