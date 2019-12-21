@@ -32,7 +32,7 @@ RUN set -ex \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
   && ./autogen.sh \
-  && ./configure --prefix=/usr --enable-shared --disable-static --enable-opt --disable-ssp --enable-minimal \
+  && ./configure --prefix=/usr --enable-shared --disable-static --enable-opt --enable-minimal \
   && make && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
