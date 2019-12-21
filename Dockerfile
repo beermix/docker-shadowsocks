@@ -56,8 +56,6 @@ RUN set -ex \
   && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
   && mv server_linux_amd64 /usr/bin/kcptun-server \
   && mv client_linux_amd64 /usr/bin/kcptun-client \
-  && strip -s /usr/bin/* \
-  && strip -s /usr/local/bin/* \
   && runDeps="$( \
       scanelf --needed --nobanner /usr/bin/ss-* /usr/local/bin/obfs-* \
         | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
