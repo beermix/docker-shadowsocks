@@ -11,8 +11,7 @@ ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/$SH
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
-RUN set -ex \
-  && apk upgrade --update \
+RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps \
      build-base \
      pcre-dev c-ares-dev linux-headers libev-dev zlib-dev flex bison libcap \
