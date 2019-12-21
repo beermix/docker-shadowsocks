@@ -17,7 +17,7 @@ RUN set -ex \
      build-base \
      pcre-dev c-ares-dev linux-headers libev-dev zlib-dev flex bison libcap \
      autoconf automake libtool curl git cmake \
-  && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
+  && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev udns-dev \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
   && tar xfz mbedtls-$MBEDTLS_VERSION-gpl.tgz \
@@ -32,7 +32,7 @@ RUN set -ex \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
   && ./autogen.sh \
-  && ./configure --prefix=/usr --enable-shared --disable-static --enable-opt --enable-minimal \
+  && ./configure --prefix=/usr --enable-shared --disable-static --enable-opt --enable-minimal --disable-ssp \
   && make && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
@@ -40,7 +40,7 @@ RUN set -ex \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
   && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
   && ./autogen.sh \
-  && ./configure --prefix=/usr --disable-documentation --enable-shared --disable-static --enable-system-shared-lib --disable-silent-rules \
+  && ./configure --prefix=/usr --disable-documentation --enable-shared --disable-static --enable-system-shared-lib --disable-silent-rules --disable-ssp \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
@@ -49,7 +49,7 @@ RUN set -ex \
   && git checkout -b v$SIMPLE_OBFS_VERSION \
   && git submodule update --init --recursive \
   && ./autogen.sh \
-  && ./configure --disable-documentation --disable-silent-rules \
+  && ./configure --disable-documentation --disable-silent-rules --disable-ssp \
   && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
