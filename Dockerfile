@@ -4,7 +4,7 @@ ENV MBEDTLS_VERSION 2.16.3
 ENV LIBSODIUM_VERSION 1.0.18
 ENV SHADOWSOCKS_VERSION ffc2ea42fc8a4332ffa9b8b022ec86b97a19748c
 ENV SIMPLE_OBFS_VERSION 486bebd
-ENV KCPTUN_VERSION 20191127
+ENV KCPTUN_VERSION 20191219
 ENV MBEDTLS_URL=https://tls.mbed.org/download/mbedtls-$MBEDTLS_VERSION-gpl.tgz
 ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSION-RELEASE/libsodium-$LIBSODIUM_VERSION.tar.gz
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/$SHADOWSOCKS_VERSION.tar.gz
@@ -30,7 +30,7 @@ RUN apk upgrade --update \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
-  && ./configure --prefix=/usr --enable-minimal --enable-shared --disable-static --enable-opt --disable-ssp --disable-pie --enable-minimal \
+  && ./configure --prefix=/usr --enable-minimal --enable-shared --disable-static --enable-opt --disable-ssp --enable-minimal \
   && make && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
@@ -38,7 +38,7 @@ RUN apk upgrade --update \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
   && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
   && ./autogen.sh \
-  && ./configure --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-silent-rules --disable-assert --disable-ssp \
+  && ./configure --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-silent-rules --disable-ssp \
   && make && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
@@ -47,7 +47,7 @@ RUN apk upgrade --update \
   && git checkout -b v$SIMPLE_OBFS_VERSION \
   && git submodule update --init --recursive \
   && ./autogen.sh \
-  && ./configure --disable-documentation --disable-silent-rules --disable-assert --disable-ssp \
+  && ./configure --disable-documentation --disable-silent-rules --disable-ssp \
   && make && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
