@@ -32,7 +32,7 @@ RUN apk upgrade --update \
   && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
-  && tar xfz $SHADOWSOCKS_VERSION.tar.gz \
+  && tar xfz v$SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
   && wget https://raw.githubusercontent.com/alpinelinux/aports/master/testing/shadowsocks-libev/use-upstream-libcorkipset-libbloom.patch \
   && patch -p1 < use-upstream-libcorkipset-libbloom.patch \
@@ -53,13 +53,14 @@ RUN apk upgrade --update \
   && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
   && mv server_linux_amd64 /usr/bin/kcptun-server \
   && mv client_linux_amd64 /usr/bin/kcptun-client \
+  && apk add --no-cache ca-certificates rng-tools \
   && runDeps="$( \
       scanelf --needed --nobanner /usr/bin/ss-* /usr/local/bin/obfs-* \
         | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
         | xargs -r apk info --installed \
         | sort -u \
       )" \
-  && apk add --virtual .run-deps $runDeps libsodium \
+  && apk add --virtual .run-deps $runDeps \
   && apk add --virtual .sys-deps bash \
   && apk del .build-deps \
   && rm -rf /tmp/* /var/cache/apk/*
