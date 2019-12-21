@@ -37,7 +37,7 @@ RUN apk upgrade --update \
   && wget https://raw.githubusercontent.com/alpinelinux/aports/master/testing/shadowsocks-libev/use-upstream-libcorkipset-libbloom.patch \
   && patch -p1 < use-upstream-libcorkipset-libbloom.patch \
   && ./autogen.sh \
-  && ./configure --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib \
+  && ./configure --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-silent-rules \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
