@@ -53,7 +53,6 @@ RUN apk upgrade --update \
   && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
   && mv server_linux_amd64 /usr/bin/kcptun-server \
   && mv client_linux_amd64 /usr/bin/kcptun-client \
-  && apk add --no-cache ca-certificates rng-tools \
   && runDeps="$( \
       scanelf --needed --nobanner /usr/bin/ss-* /usr/local/bin/obfs-* \
         | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
@@ -62,6 +61,7 @@ RUN apk upgrade --update \
       )" \
   && apk add --virtual .run-deps $runDeps \
   && apk add --virtual .sys-deps bash \
+  && apk add --no-cache ca-certificates rng-tools \
   && apk del .build-deps \
   && rm -rf /tmp/* /var/cache/apk/*
 
