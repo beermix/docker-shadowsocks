@@ -69,4 +69,3 @@ ADD sysctl.conf /etc/sysctl.conf
 ADD entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-
