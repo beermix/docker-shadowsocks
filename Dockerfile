@@ -20,6 +20,7 @@ RUN apk upgrade --update \
   && curl -sSLO "$LIBEV_URL" \
   && tar xfz libev-$LIBEV_VERSION.tar.gz \
   && cd libev-$LIBEV_VERSION \
+  && ./autogen.sh \
   && ./configure --prefix=/usr --disable-shared \
   && make install \
   && cd /tmp \
@@ -33,6 +34,7 @@ RUN apk upgrade --update \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
+  && ./autogen.sh \
   && ./configure --prefix=/usr --enable-opt \
   && make install \
   && cd /tmp \
