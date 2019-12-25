@@ -29,7 +29,7 @@ RUN apk upgrade --update \
   && cd mbedtls-$MBEDTLS_VERSION \
   && sed -i -e 's|//\(#define MBEDTLS_THREADING_C\)|\1|' -e 's|//\(#define MBEDTLS_THREADING_PTHREAD\)|\1|' include/mbedtls/config.h \
   && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DUSE_SHARED_MBEDTLS_LIBRARY=1 \
-  -DUSE_STATIC_MBEDTLS_LIBRARY=0 -DENABLE_PROGRAMS=0 -DENABLE_TESTING=0 -DLINK_WITH_PTHREAD=1 -DCMAKE_VERBOSE_MAKEFILE=0 -Wno-dev \
+  -DUSE_STATIC_MBEDTLS_LIBRARY=1 -DENABLE_PROGRAMS=0 -DENABLE_TESTING=0 -DLINK_WITH_PTHREAD=1 -DCMAKE_VERBOSE_MAKEFILE=0 -Wno-dev \
   && make install \
   && cd /tmp \
   && curl -sSLO "$LIBSODIUM_URL" \
@@ -44,7 +44,7 @@ RUN apk upgrade --update \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
   && wget https://raw.githubusercontent.com/alpinelinux/aports/master/testing/shadowsocks-libev/use-upstream-libcorkipset-libbloom.patch \
   && patch -p1 < use-upstream-libcorkipset-libbloom.patch \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=1 \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
