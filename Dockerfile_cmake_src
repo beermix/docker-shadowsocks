@@ -15,13 +15,13 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 
 RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps build-base alpine-sdk cmake linux-headers \
-  udns-dev pcre-dev zlib-dev libcap autoconf automake autoconf-archive libtool curl git wget gawk \
+  udns-dev pcre-dev zlib-dev libcap autoconf automake autoconf-archive c-ares-dev libtool curl git wget gawk \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
   && curl -sSLO "$LIBEV_URL" \
   && tar xfz libev-$LIBEV_VERSION.tar.gz \
   && cd libev-$LIBEV_VERSION \
-  && ./configure --prefix=/usr \
+  && ./configure --prefix=/usr --disable-static \
   && make install \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
@@ -36,7 +36,7 @@ RUN apk upgrade --update \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
   && ./autogen.sh \
-  && ./configure --prefix=/usr --enable-opt --disable-ssp --disable-pie \
+  && ./configure --prefix=/usr --disable-static --enable-opt --disable-ssp --disable-pie \
   && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
