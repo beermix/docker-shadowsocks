@@ -31,7 +31,7 @@ RUN apk upgrade --update \
   && git clone --recursive $SIMPLE_OBFS_URL \
   && cd simple-obfs \
   && bash autogen.sh \
-  && ./configure --disable-documentation \
+  && ./configure --disable-documentation --disable-assert --disable-ssp \
   && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
