@@ -28,14 +28,14 @@ RUN apk upgrade --update \
   && tar xfz mbedtls-$MBEDTLS_VERSION-gpl.tgz \
   && cd mbedtls-$MBEDTLS_VERSION \
   && sed -i -e 's|//\(#define MBEDTLS_THREADING_C\)|\1|' -e 's|//\(#define MBEDTLS_THREADING_PTHREAD\)|\1|' include/mbedtls/config.h \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DUSE_SHARED_MBEDTLS_LIBRARY=ON -DENABLE_PROGRAMS=0 -DENABLE_TESTING=0 -Wno-dev \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DUSE_SHARED_MBEDTLS_LIBRARY=0 -DUSE_STATIC_MBEDTLS_LIBRARY=1 -DENABLE_PROGRAMS=0 -DENABLE_TESTING=0 -Wno-dev \
   && make install \
   && cd /tmp \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
   && bash autogen.sh \
-  && ./configure --prefix=/usr --enable-opt \
+  && ./configure --prefix=/usr --enable-opt --disable-shared \
   && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
