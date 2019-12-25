@@ -34,7 +34,7 @@ RUN apk upgrade --update \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
-  && ./autogen.sh \
+  && bash autogen.sh \
   && ./configure --prefix=/usr --enable-opt \
   && make install \
   && cd /tmp \
@@ -43,7 +43,7 @@ RUN apk upgrade --update \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
   && wget https://raw.githubusercontent.com/alpinelinux/aports/master/testing/shadowsocks-libev/use-upstream-libcorkipset-libbloom.patch \
   && patch -p1 < use-upstream-libcorkipset-libbloom.patch \
-  && ./autogen.sh \
+  && bash autogen.sh \
   && ./configure --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-silent-rules \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
@@ -52,7 +52,7 @@ RUN apk upgrade --update \
   && cd simple-obfs \
   && git checkout -b v$SIMPLE_OBFS_VERSION \
   && git submodule update --init --recursive \
-  && ./autogen.sh \
+  && bash autogen.sh \
   && ./configure --disable-documentation \
   && make install \
   && cd /tmp \
