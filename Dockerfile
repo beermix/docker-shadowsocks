@@ -2,12 +2,12 @@ FROM alpine:edge
 
 ENV MBEDTLS_VERSION 2.16.3
 ENV LIBSODIUM_VERSION 1.0.18
-ENV SHADOWSOCKS_VERSION 3.3.3
+ENV SHADOWSOCKS_VERSION 74daa50
 ENV SIMPLE_OBFS_VERSION 486bebd
 ENV KCPTUN_VERSION 20191219
 ENV MBEDTLS_URL=https://tls.mbed.org/download/mbedtls-$MBEDTLS_VERSION-gpl.tgz
 ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSION-RELEASE/libsodium-$LIBSODIUM_VERSION.tar.gz
-ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/v$SHADOWSOCKS_VERSION.tar.gz
+ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/$SHADOWSOCKS_VERSION.tar.gz
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
@@ -29,7 +29,7 @@ RUN apk upgrade --update \
   && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
-  && tar xfz v$SHADOWSOCKS_VERSION.tar.gz \
+  && tar xfz $SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
   && wget https://raw.githubusercontent.com/alpinelinux/aports/master/testing/shadowsocks-libev/use-upstream-libcorkipset-libbloom.patch \
   && patch -p1 < use-upstream-libcorkipset-libbloom.patch \
