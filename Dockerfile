@@ -21,21 +21,21 @@ RUN apk upgrade --update \
   && tar xfz libev-$LIBEV_VERSION.tar.gz \
   && cd libev-$LIBEV_VERSION \
   && bash autogen.sh \
-  && ./configure --prefix=/usr --disable-shared --with-pic \
+  && ./configure --prefix=/usr --disable-static \
   && make install \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
   && tar xfz mbedtls-$MBEDTLS_VERSION-gpl.tgz \
   && cd mbedtls-$MBEDTLS_VERSION \
   && sed -i -e 's|//\(#define MBEDTLS_THREADING_C\)|\1|' -e 's|//\(#define MBEDTLS_THREADING_PTHREAD\)|\1|' include/mbedtls/config.h \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DUSE_SHARED_MBEDTLS_LIBRARY=0 -DUSE_STATIC_MBEDTLS_LIBRARY=1 -DENABLE_PROGRAMS=0 -DENABLE_TESTING=0 -DLINK_WITH_PTHREAD=1 -DCMAKE_C_FLAGS_RELEASE=-fPIC -DCMAKE_VERBOSE_MAKEFILE=1 -Wno-dev \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DUSE_SHARED_MBEDTLS_LIBRARY=1 -DUSE_STATIC_MBEDTLS_LIBRARY=0 -DENABLE_PROGRAMS=0 -DENABLE_TESTING=0 -DLINK_WITH_PTHREAD=1 -DCMAKE_VERBOSE_MAKEFILE=1 -Wno-dev \
   && make install \
   && cd /tmp \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
   && bash autogen.sh \
-  && ./configure --prefix=/usr --enable-opt --disable-shared --with-pic \
+  && ./configure --prefix=/usr --enable-opt --disable-static \
   && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
