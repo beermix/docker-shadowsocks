@@ -13,7 +13,7 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 
 RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps \
-  && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing build-base libcorkipset-dev libbloom-dev udns-dev pcre-dev c-ares-dev linux-headers libev-dev zlib-dev libcap autoconf automake libtool curl git cmake wget \
+  && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing build-base libcorkipset-dev libbloom-dev udns-dev pcre-dev c-ares-dev linux-headers libev-dev zlib-dev libcap autoconf automake libtool curl git cmake wget autoconf-archive \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
   && tar xfz mbedtls-$MBEDTLS_VERSION-gpl.tgz \
@@ -25,7 +25,7 @@ RUN apk upgrade --update \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
-  && ./configure --prefix=/usr --enable-opt --enable-minimal \
+  && ./configure --prefix=/usr --enable-opt \
   && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
