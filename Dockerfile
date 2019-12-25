@@ -1,13 +1,13 @@
 FROM alpine:edge
 
 ENV MBEDTLS_VERSION 2.16.3
-ENV LIBSODIUM_VERSION 1.0.18
+ENV LIBSODIUM_VERSION stable
 ENV LIBEV_VERSION 4.31
 ENV SHADOWSOCKS_VERSION master
 ENV SIMPLE_OBFS_VERSION master
 ENV KCPTUN_VERSION 20191219
 ENV MBEDTLS_URL=https://tls.mbed.org/download/mbedtls-$MBEDTLS_VERSION-gpl.tgz
-ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSION-RELEASE/libsodium-$LIBSODIUM_VERSION.tar.gz
+ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium.git
 ENV LIBEV_URL https://fossies.org/linux/misc/libev-$LIBEV_VERSION.tar.gz
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/$SHADOWSOCKS_VERSION.tar.gz
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
@@ -31,9 +31,8 @@ RUN apk upgrade --update \
   && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DUSE_SHARED_MBEDTLS_LIBRARY=1 -DUSE_STATIC_MBEDTLS_LIBRARY=0 -DENABLE_PROGRAMS=0 -DENABLE_TESTING=0 -DLINK_WITH_PTHREAD=1 -DCMAKE_VERBOSE_MAKEFILE=1 -Wno-dev \
   && make install \
   && cd /tmp \
-  && curl -sSLO "$LIBSODIUM_URL" \
-  && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
-  && cd libsodium-$LIBSODIUM_VERSION \
+  && git clone $LIBSODIUM_URL -b stable \
+  && cd libsodium \
   && bash autogen.sh \
   && ./configure --prefix=/usr --enable-opt --disable-static \
   && make install \
