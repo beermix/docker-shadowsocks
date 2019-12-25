@@ -15,7 +15,7 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 
 RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps \
-  && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing build-base libcorkipset-dev libbloom-dev udns-dev pcre-dev c-ares-dev linux-headers zlib-dev libcap autoconf automake libtool curl git cmake wget autoconf-archive \
+  && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing build-base libcorkipset-dev libbloom-dev udns-dev pcre-dev c-ares-dev linux-headers zlib-dev libcap autoconf automake libtool curl git cmake wget autoconf-archive gawk \
   && cd /tmp \
   && curl -sSLO "$LIBEV_URL" \
   && tar xfz libev-$LIBEV_VERSION.tar.gz \
