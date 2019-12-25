@@ -2,18 +2,26 @@ FROM alpine:edge
 
 ENV MBEDTLS_VERSION 2.16.3
 ENV LIBSODIUM_VERSION 1.0.18
+ENV LIBEV_VERSION 4.31
 ENV SHADOWSOCKS_VERSION master
 ENV SIMPLE_OBFS_VERSION 486bebd
 ENV KCPTUN_VERSION 20191219
 ENV MBEDTLS_URL=https://tls.mbed.org/download/mbedtls-$MBEDTLS_VERSION-gpl.tgz
 ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSION-RELEASE/libsodium-$LIBSODIUM_VERSION.tar.gz
+ENV LIBEV_URL https://fossies.org/linux/misc/libev-$LIBEV_VERSION.tar.gz
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/$SHADOWSOCKS_VERSION.tar.gz
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps \
-  && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing build-base libcorkipset-dev libbloom-dev udns-dev pcre-dev c-ares-dev linux-headers libev-dev zlib-dev libcap autoconf automake libtool curl git cmake wget autoconf-archive \
+  && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing build-base libcorkipset-dev libbloom-dev udns-dev pcre-dev c-ares-dev linux-headers zlib-dev libcap autoconf automake libtool curl git cmake wget autoconf-archive \
+  && cd /tmp \
+  && curl -sSLO "$LIBEV_URL" \
+  && tar xfz libev-$LIBEV_VERSION.tar.gz \
+  && cd libev-$LIBEV_VERSION \
+  && ./configure --prefix=/usr --disable-shared \
+  && make install \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
   && tar xfz mbedtls-$MBEDTLS_VERSION-gpl.tgz \
