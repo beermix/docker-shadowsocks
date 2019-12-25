@@ -20,7 +20,7 @@ RUN apk upgrade --update \
   && curl -sSLO "$LIBEV_URL" \
   && tar xfz libev-$LIBEV_VERSION.tar.gz \
   && cd libev-$LIBEV_VERSION \
-  && ./autogen.sh \
+  && bash autogen.sh \
   && ./configure --prefix=/usr --disable-shared \
   && make install \
   && cd /tmp \
