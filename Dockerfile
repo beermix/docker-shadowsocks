@@ -61,7 +61,7 @@ RUN apk upgrade --update \
       )" \
   && apk add --virtual .run-deps $runDeps \
   && apk add --virtual .sys-deps bash \
-  && apk add --no-cache ca-certificates rng-tools \
+  && apk add ca-certificates rng-tools \
   && apk del .build-deps \
   && rm -rf /tmp/* /var/cache/apk/*
 
