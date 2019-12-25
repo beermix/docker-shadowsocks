@@ -21,7 +21,6 @@ RUN apk upgrade --update \
   && curl -sSLO "$LIBEV_URL" \
   && tar xfz libev-$LIBEV_VERSION.tar.gz \
   && cd libev-$LIBEV_VERSION \
-  && ./autogen.sh \
   && ./configure --prefix=/usr \
   && make install \
   && cd /tmp \
