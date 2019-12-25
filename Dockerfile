@@ -48,10 +48,8 @@ RUN apk upgrade --update \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
-  && git clone $SIMPLE_OBFS_URL \
+  && git clone --recursive $SIMPLE_OBFS_URL \
   && cd simple-obfs \
-  && git checkout -b v$SIMPLE_OBFS_VERSION \
-  && git submodule update --init --recursive \
   && bash autogen.sh \
   && ./configure --disable-documentation \
   && make install \
