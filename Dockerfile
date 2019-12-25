@@ -4,7 +4,7 @@ ENV MBEDTLS_VERSION 2.16.3
 ENV LIBSODIUM_VERSION 1.0.18
 ENV LIBEV_VERSION 4.31
 ENV SHADOWSOCKS_VERSION master
-ENV SIMPLE_OBFS_VERSION 486bebd
+ENV SIMPLE_OBFS_VERSION master
 ENV KCPTUN_VERSION 20191219
 ENV MBEDTLS_URL=https://tls.mbed.org/download/mbedtls-$MBEDTLS_VERSION-gpl.tgz
 ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSION-RELEASE/libsodium-$LIBSODIUM_VERSION.tar.gz
@@ -21,7 +21,7 @@ RUN apk upgrade --update \
   && tar xfz libev-$LIBEV_VERSION.tar.gz \
   && cd libev-$LIBEV_VERSION \
   && bash autogen.sh \
-  && ./configure --prefix=/usr --disable-shared \
+  && ./configure --prefix=/usr --disable-shared --with-pic \
   && make install \
   && cd /tmp \
   && curl -sSLO "$MBEDTLS_URL" \
@@ -35,7 +35,7 @@ RUN apk upgrade --update \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
   && bash autogen.sh \
-  && ./configure --prefix=/usr --enable-opt --disable-shared \
+  && ./configure --prefix=/usr --enable-opt --disable-shared --with-pic \
   && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
