@@ -9,7 +9,7 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 
 RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps build-base alpine-sdk cmake linux-headers \
-  udns-dev pcre-dev c-ares-dev zlib-dev libcap autoconf automake libtool \
+  udns-dev pcre-dev c-ares-dev zlib-dev libcap autoconf automake libtool wget \
   curl git gawk libev-dev libsodium-dev mbedtls-static mbedtls-dev \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
@@ -22,7 +22,7 @@ RUN apk upgrade --update \
   && cd /tmp \
   && git clone --recursive $SIMPLE_OBFS_URL \
   && cd simple-obfs \
-  && bash autogen.sh \
+  && ./autogen.sh \
   && ./configure --disable-documentation \
   && make install \
   && cd /tmp \
