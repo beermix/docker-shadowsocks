@@ -12,12 +12,13 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 
 RUN apk add --no-cache --virtual .build-deps \
     alpine-sdk cmake curl libtool m4 \
-    linux-headers libev-dev libsodium-dev mbedtls-static mbedtls-dev pcre-dev udns-dev \
+    linux-headers libev-dev libsodium-dev mbedtls-static mbedtls-dev pcre-dev wget \
+    autoconf automake m4 bison flex m4 libtool \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
-  && git clone --recursive https://github.com/shadowsocks/libudns \
-  && cd libudns \
-  && ./autogen.sh \
+  && wget http://www.corpit.ru/mjt/udns/udns-0.4.tar.gz \
+  && tar xfz udns-0.4.tar.gz \
+  && cd udns-0.4 \
   && ./configure --disable-shared --prefix=/usr \
   && make install \
   && cd /tmp \
