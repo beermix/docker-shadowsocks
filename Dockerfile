@@ -15,6 +15,12 @@ RUN apk add --no-cache --virtual .build-deps \
     linux-headers libev-dev libsodium-dev mbedtls-static mbedtls-dev pcre-dev udns-dev \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
+  && git clone --recursive https://github.com/shadowsocks/libudns \
+  && cd libudns \
+  && ./autogen.sh \
+  && ./configure --disable-shared --prefix=/usr \
+  && make install \
+  && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
   && tar xfz $SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
