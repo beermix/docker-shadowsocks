@@ -10,16 +10,15 @@ ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 
-RUN apk add --no-cache --virtual .build-deps \
-    alpine-sdk cmake curl libtool m4 \
-    linux-headers libev-dev libsodium-dev mbedtls-static mbedtls-dev udns pcre-dev wget zlib-dev libcap  curl git wget gawk  \
-    autoconf automake m4 bison flex m4 libtool \
+RUN apk upgrade --update \
+  && apk add --no-cache --virtual .build-deps build-base alpine-sdk cmake linux-headers \
+  udns-dev pcre-dev zlib-dev libcap autoconf automake autoconf-archive c-ares-dev libtool curl git wget gawk \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
   && tar xfz $SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=OFF -DCMAKE_VERBOSE_MAKEFILE=1 \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
   && make install \
   && ldd ./bin/ss-server \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
