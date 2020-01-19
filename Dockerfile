@@ -19,7 +19,7 @@ RUN apk add --no-cache --virtual .build-deps \
   && wget http://www.corpit.ru/mjt/udns/udns-0.4.tar.gz \
   && tar xfz udns-0.4.tar.gz \
   && cd udns-0.4 \
-  && ./configure --disable-shared --prefix=/usr \
+  && ./configure --enable-static --prefix=/usr \
   && make install \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
