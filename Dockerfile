@@ -9,7 +9,7 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 
  RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps autoconf automake build-base \
-  c-ares-dev libcap libev-dev libtool libsodium-dev linux-headers mbedtls-dev pcre-dev cmake \
+  c-ares-dev libcap libev-dev libtool libsodium-dev linux-headers mbedtls-dev pcre-dev cmake curl \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
