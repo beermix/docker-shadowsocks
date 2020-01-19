@@ -16,12 +16,19 @@ RUN apk add --no-cache --virtual .build-deps \
     autoconf automake m4 bison flex m4 libtool \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
+  && wget http://www.corpit.ru/mjt/udns/udns-0.4.tar.gz \
+  && tar xfz udns-0.4.tar.gz \
+  && cd udns-0.4 \
+  && ./configure --enable-static --prefix=/usr \
+  && make install \
+  && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
   && tar xfz $SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=OFF -DCMAKE_VERBOSE_MAKEFILE=1 \
-  && make install \
-  && ldd ./bin/ss-server \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=1 \
+  && make \
+  && cp -ri ./bin/ss-server  /usr/bin/ \
+  && ldd /usr/bin/ss-serve \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive $SIMPLE_OBFS_URL \
