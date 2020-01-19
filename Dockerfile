@@ -7,8 +7,8 @@ ENV SHADOWSOCKS_VERSION master
 ENV SIMPLE_OBFS_VERSION master
 ENV KCPTUN_VERSION 20200103
 ENV MBEDTLS_URL=https://tls.mbed.org/download/mbedtls-$MBEDTLS_VERSION-gpl.tgz
-ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/archive/stable.tar.gz
 ENV LIBEV_URL https://fossies.org/linux/misc/libev-$LIBEV_VERSION.tar.gz
+ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/archive/$LIBSODIUM_VERSION.tar.gz
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/$SHADOWSOCKS_VERSION.tar.gz
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
@@ -33,7 +33,7 @@ RUN apk upgrade --update \
   && make install \
   && cd /tmp \
   && curl -sSLO "$LIBSODIUM_URL" \
-  && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
+  && tar xfz $LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
   && ./autogen.sh \
   && ./configure --prefix=/usr --enable-opt \
