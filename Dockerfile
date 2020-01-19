@@ -1,18 +1,16 @@
-FROM alpine:edge
+FROM alpine
 
 ENV SHADOWSOCKS_VERSION master
-ENV LIBSODIUM_VERSION 1.0.18
 ENV SIMPLE_OBFS_VERSION master
 ENV KCPTUN_VERSION 20200103
-ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSION-RELEASE/libsodium-$LIBSODIUM_VERSION.tar.gz
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/$SHADOWSOCKS_VERSION.tar.gz
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
-
 RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps build-base alpine-sdk cmake linux-headers \
-  udns-dev pcre-dev zlib-dev libcap autoconf automake autoconf-archive c-ares-dev libtool curl git wget gawk \
+  udns-dev pcre-dev c-ares-dev zlib-dev libcap autoconf automake libtool wget \
+  curl git gawk libev-dev libsodium-dev mbedtls-static mbedtls-dev \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
   && curl -sSLO "$SHADOWSOCKS_URL" \
