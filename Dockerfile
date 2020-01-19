@@ -12,7 +12,7 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 
 RUN apk add --no-cache --virtual .build-deps \
     alpine-sdk cmake curl libtool m4 \
-    linux-headers libev-dev libsodium-dev mbedtls-static mbedtls-dev pcre-dev wget \
+    linux-headers libev-dev libsodium-dev mbedtls-static mbedtls-dev udns pcre-dev wget zlib-dev libcap  curl git wget gawk  \
     autoconf automake m4 bison flex m4 libtool \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
