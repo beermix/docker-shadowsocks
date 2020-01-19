@@ -9,11 +9,21 @@ ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/$SH
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
+<<<<<<< HEAD
 RUN apk upgrade --update \
   && apk add --virtual .build-deps curl git cmake \
      build-base gcc abuild binutils \
      pcre-dev c-ares-dev linux-headers libev-dev zlib-dev \
      autoconf automake libtool \
+=======
+ RUN apk upgrade --update \
+  && apk add --no-cache --virtual .build-deps autoconf automake build-base \
+<<<<<<< HEAD
+  c-ares-dev libcap libev-dev libtool libsodium-dev linux-headers mbedtls-dev pcre-dev cmake curl \
+=======
+  c-ares-dev libcap libev-dev libtool linux-headers mbedtls-dev pcre-dev cmake \
+>>>>>>> 41de7304ddc6b2157fa24f262e068ed55c91ccde
+>>>>>>> d0156153492f65ea63bb3d63311c2d0954dea264
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
   && curl -sSLO "$LIBSODIUM_URL" \
