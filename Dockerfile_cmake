@@ -7,8 +7,8 @@ ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/$SH
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
-RUN apt upgrade -y && apt upgrade -y && apt install -y \
-      git gettext build-essential autoconf libtool libssl-dev libpcre3-dev zlib1g-dev \
+RUN apt-get update -y && apt-get upgrade -y && apt-get install -y \
+      git-core gettext build-essential autoconf libtool libssl-dev libpcre3-dev zlib1g-dev \
       libev-dev libudns-dev libsodium-dev libbloom-dev libcork-dev libcorkipset-dev libmbedtls-dev \
       ca-certificates automake curl cmake gawk bison flex \
   && cd /tmp \
