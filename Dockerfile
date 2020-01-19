@@ -17,7 +17,8 @@ RUN apk upgrade --update \
   && tar xfz $SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
   && cmake -DCMAKE_BUILD_TYPE=Release -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=1 -DCMAKE_VERBOSE_MAKEFILE=0 \
-  $$ cp ./bin/ss-server  /usr/bin/ss-server \
+  $$ make \
+  && cp ./bin/ss-server  /usr/bin/ss-server \
   && ls /usr/bin/ss-server | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive $SIMPLE_OBFS_URL \
