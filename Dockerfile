@@ -1,22 +1,15 @@
-FROM alpine:edge
+FROM alpine
 
-ENV SHADOWSOCKS_VERSION master
-ENV SIMPLE_OBFS_VERSION 0.0.5
 ENV KCPTUN_VERSION 20200103
-ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/$SHADOWSOCKS_VERSION.tar.gz
-ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 RUN apk upgrade --update \
-  && apk add --virtual .build-deps curl git \
-     alpine-sdk cmake linux-headers libev-dev libsodium-dev mbedtls-static mbedtls-dev pcre-dev udns-dev \
-     pcre-dev mbedtls-dev libsodium-dev c-ares-dev linux-headers libev-dev libcap \
-     autoconf automake libtool \
-  && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
+  && apk add --no-cache --virtual .build-deps autoconf automake build-base libtool curl git flex bison gawk sed \
+  alpine-sdk linux-headers udns-dev pcre-dev mbedtls-dev libsodium-dev c-ares-dev libev-dev libcap \
+  && apk add --no-cache --virtual -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
-  && curl -sSLO "$SHADOWSOCKS_URL" \
-  && tar xfz $SHADOWSOCKS_VERSION.tar.gz \
-  && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
+  && git clone --depth 1 https://github.com/shadowsocks/shadowsocks-libev \
+  && cd shadowsocks-libev \
   && wget https://raw.githubusercontent.com/alpinelinux/aports/master/testing/shadowsocks-libev/use-upstream-libcorkipset-libbloom.patch \
   && patch -p1 < use-upstream-libcorkipset-libbloom.patch \
   && ./autogen.sh \
@@ -24,10 +17,9 @@ RUN apk upgrade --update \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
-  && git clone $SIMPLE_OBFS_URL \
-  && cd simple-obfs \
   && git checkout -b v$SIMPLE_OBFS_VERSION \
-  && git submodule update --init --recursive \
+  && git clone --recursive --depth 1 https://github.com/shadowsocks/simple-obfs \
+  && cd simple-obfs \
   && ./autogen.sh \
   && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-z,relro -Wl,-z,now -s" --disable-documentation --disable-ssp --disable-assert --disable-silent-rules \
   && make install \
