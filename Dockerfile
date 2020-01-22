@@ -4,7 +4,7 @@ ENV KCPTUN_VERSION 20200103
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 RUN apk upgrade --update \
-  && apk add --no-cache .build-deps autoconf automake build-base libtool curl git flex bison gawk sed \
+  && apk add --no-cache --virtual .build-deps build-base autoconf automake libtool curl git flex bison gawk sed \
   alpine-sdk linux-headers udns-dev pcre-dev mbedtls-dev libsodium-dev c-ares-dev libev-dev libcap \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
