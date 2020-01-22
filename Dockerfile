@@ -17,7 +17,6 @@ RUN apk upgrade --update \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
-  && git checkout -b v$SIMPLE_OBFS_VERSION \
   && git clone --recursive --depth 1 https://github.com/shadowsocks/simple-obfs \
   && cd simple-obfs \
   && ./autogen.sh \
