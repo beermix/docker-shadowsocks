@@ -13,14 +13,14 @@ RUN apk upgrade --update \
   && wget https://raw.githubusercontent.com/alpinelinux/aports/master/testing/shadowsocks-libev/use-upstream-libcorkipset-libbloom.patch \
   && patch -p1 < use-upstream-libcorkipset-libbloom.patch \
   && ./autogen.sh \
-  && ./configure CFLAGS="-march=native -O3 -pipe -fstack-protector-strong" CXXFLAGS="-march=native -O3 -pipe -fstack-protector-strong" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-z,relro -Wl,-z,now -s" --prefix=/usr --disable-documentation --enable-shared --disable-static --enable-system-shared-lib --disable-ssp --disable-silent-rules \
+  && ./configure CFLAGS="-march=native -O3 -pipe -fstack-protector-strong -fno-plt" CXXFLAGS="-march=native -O3 -pipe -fstack-protector-strong -fno-plt" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-O1,--sort-common,-z,relro,-z,now -s" --prefix=/usr --disable-documentation --enable-shared --disable-static --enable-system-shared-lib --disable-ssp --disable-silent-rules \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive --depth 1 https://github.com/shadowsocks/simple-obfs \
   && cd simple-obfs \
   && ./autogen.sh \
-  && ./configure CFLAGS="-march=native -O3 -pipe -fstack-protector-strong" CXXFLAGS="-march=native -O3 -pipe -fstack-protector-strong" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-z,relro -Wl,-z,now -s" --disable-documentation --disable-ssp --disable-silent-rules \
+  && ./configure CFLAGS="-march=native -O3 -pipe -fstack-protector-strong -fno-plt" CXXFLAGS="-march=native -O3 -pipe -fstack-protector-strong -fno-plt" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-O1,--sort-common,-z,relro,-z,now -s" --disable-documentation --disable-ssp --disable-silent-rules \
   && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
