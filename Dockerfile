@@ -10,17 +10,16 @@ RUN apk upgrade --update \
   && cd /tmp \
   && git clone --depth 1 https://github.com/shadowsocks/shadowsocks-libev \
   && cd shadowsocks-libev \
-  && wget https://raw.githubusercontent.com/alpinelinux/aports/master/testing/shadowsocks-libev/use-upstream-libcorkipset-libbloom.patch \
-  && patch -p1 < use-upstream-libcorkipset-libbloom.patch \
+  && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
   && ./autogen.sh \
-  && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-z,relro -Wl,-z,now -s" --prefix=/usr --disable-documentation --enable-shared --disable-static --enable-system-shared-lib --disable-silent-rules \
+  && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-z,relro -Wl,-z,now -s" --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-silent-rules \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive --depth 1 https://github.com/shadowsocks/simple-obfs \
   && cd simple-obfs \
   && ./autogen.sh \
-  && ./configure CFLAGS="-march=native -O3 -pipe -fstack-protector-strong -fno-plt" CXXFLAGS="-march=native -O3 -pipe -fstack-protector-strong -fno-plt" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-O1,--sort-common,-z,relro,-z,now -s" --disable-documentation --disable-silent-rules \
+   && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-z,relro -Wl,-z,now -s" --disable-documentation --disable-silent-rules \
   && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
