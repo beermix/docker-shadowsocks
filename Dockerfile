@@ -1,6 +1,8 @@
 FROM alpine:edge
 
-ENV KCPTUN_VERSION 20200103
+ENV KCPTUN_VERSION 20200201
+ENV SIMPLE_OBFS_VERSION 0.0.5
+ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 RUN apk upgrade --update \
@@ -12,14 +14,16 @@ RUN apk upgrade --update \
   && cd shadowsocks-libev \
   && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
   && ./autogen.sh \
-  && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-z,relro -Wl,-z,now -s" --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-silent-rules \
+  && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-z,relro -Wl,-z,now -s" --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-ssp --disable-silent-rules \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
-  && git clone --recursive --depth 1 https://github.com/shadowsocks/simple-obfs \
+  && git clone $SIMPLE_OBFS_URL \
   && cd simple-obfs \
+  && git checkout -b v$SIMPLE_OBFS_VERSION \
+  && git submodule update --init --recursive \
   && ./autogen.sh \
-   && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-z,relro -Wl,-z,now -s" --disable-documentation --disable-silent-rules \
+   && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-z,relro -Wl,-z,now -s" --disable-documentation --disable-ssp --disable-silent-rules \
   && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
