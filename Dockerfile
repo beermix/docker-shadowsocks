@@ -1,7 +1,7 @@
 FROM alpine:edge
 
 ENV KCPTUN_VERSION 20200201
-ENV SIMPLE_OBFS_VERSION 486bebd
+ENV SIMPLE_OBFS_VERSION master
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
