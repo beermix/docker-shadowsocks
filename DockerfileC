@@ -3,7 +3,7 @@ FROM archlinux
 ENV KCPTUN_VERSION 20200201
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
-RUN pacman -Sy && pacman -Suyuy --noconfirm && pacman --noconfirm -S tar curl shadowsocks-libev libcap simple-obfs \
+RUN pacman -Sy && pacman --noconfirm -S tar curl shadowsocks-libev libcap simple-obfs \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
   && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
