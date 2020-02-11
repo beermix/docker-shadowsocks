@@ -5,7 +5,8 @@ ENV SIMPLE_OBFS_VERSION 486bebd
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
-RUN export https_proxy="http://192.168.1.2:1080" export http_proxy="http://192.168.1.2:1080" pacman -Sy && export https_proxy="http://192.168.1.2:1080" export http_proxy="http://192.168.1.2:1080" pacman -Suyuy --noconfirm && export https_proxy="http://192.168.1.2:1080" export http_proxy="http://192.168.1.2:1080" pacman --noconfirm -S git autoconf automake m4 make gcc pkgconf binutils perl-error perl-timedate libtool curl \
+ENV http_proxy 192.168.1.2:1080
+RUN pacman -Sy && pacman -Suyuy --noconfirm && pacman --noconfirm -S git autoconf automake m4 make gcc pkgconf binutils perl-error perl-timedate libtool curl \
   git flex bison gawk sed libcap udns pcre mbedtls libsodium c-ares \
   libev libcap libcorkipset libbloom linux-headers \
   && cd /tmp \
