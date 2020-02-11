@@ -20,10 +20,10 @@ RUN apk upgrade --update \
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
   && cd simple-obfs \
-  && git checkout -b v$SIMPLE_OBFS_VERSION \
+  && git checkout -b $SIMPLE_OBFS_VERSION \
   && git submodule update --init --recursive \
   && ./autogen.sh \
-   && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-z,relro -Wl,-z,now -s" --disable-documentation  --disable-silent-rules \
+  && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-z,relro -Wl,-z,now -s" --disable-documentation \
   && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
