@@ -35,7 +35,6 @@ RUN pacman -Sy && pacman --noconfirm -S git base-devel make pkgconf libtool curl
       )" \
   && pacman --noconfirm -S $runDeps ca-certificates rng-tools \
   && pacman --noconfirm -S bash libcap \
-  && apk del .build-deps \
   && rm -rf /tmp/*
 
 ADD sysctl.conf /etc/sysctl.conf
