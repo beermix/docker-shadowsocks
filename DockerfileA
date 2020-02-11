@@ -5,8 +5,8 @@ ENV SIMPLE_OBFS_VERSION 486bebd
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
-RUN pacman -Sy && pacman -Suyuy --noconfirm && pacman --noconfirm -S awk git autoconf automake m4 make gcc pkgconf binutils perl-error perl-timedate libtool curl \
-  git flex bison gawk sed make gcc libcap udns pcre mbedtls libsodium c-ares \
+RUN pacman -Sy && pacman -Suyuy --noconfirm && pacman --noconfirm -S git autoconf automake m4 make gcc pkgconf binutils perl-error perl-timedate libtool curl \
+  git flex bison gawk sed libcap udns pcre mbedtls libsodium c-ares \
   libev libcap libcorkipset libbloom linux-headers \
   && cd /tmp \
   && git clone --depth 1 https://github.com/shadowsocks/shadowsocks-libev \
