@@ -6,7 +6,7 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 ADD pacman.conf /etc/pacman.conf
 ADD mirrorlist  /etc/pacman.d/mirrorlist
 
-RUN pacman -Sy && RUN pacman -Suy --noconfirm && pacman --noconfirm -S tar curl shadowsocks-libev libcap simple-obfs \
+RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S tar curl shadowsocks-libev libcap simple-obfs \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
   && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
