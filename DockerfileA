@@ -6,7 +6,7 @@ ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 ENV http_proxy 192.168.1.2:1080
-RUN pacman -Sy && pacman -Suyuy --noconfirm && pacman --noconfirm -S git autoconf automake m4 make gcc pkgconf binutils perl-error perl-timedate libtool curl \
+RUN pacman -Sy && pacman -Suyuy --noconfirm && pacman --noconfirm -S git autoconf automake m4 make base-devel pkgconf binutils perl-error perl-timedate libtool curl \
   git flex bison gawk sed libcap udns pcre mbedtls libsodium c-ares \
   libev libcap libcorkipset libbloom linux-headers procps-ng \
   && cd /tmp \
@@ -30,6 +30,16 @@ RUN pacman -Sy && pacman -Suyuy --noconfirm && pacman --noconfirm -S git autocon
   && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
   && mv server_linux_amd64 /usr/bin/kcptun-server \
   && mv client_linux_amd64 /usr/bin/kcptun-client \
+  && runDeps="$( \
+      scanelf --needed --nobanner /usr/bin/ss-* /usr/local/bin/obfs-* \
+        | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
+        | xargs -r pacman -Qqe \
+        | sort -u \
+      )" \
+  && pacman --noconfirm -S $runDeps ca-certificates rng-tools \
+  && pacman --noconfirm -S bash libcap \
+  && apk del .build-deps \
+  && rm -rf /tmp/*
 
 ADD sysctl.conf /etc/sysctl.conf
 ADD entrypoint.sh /entrypoint.sh
