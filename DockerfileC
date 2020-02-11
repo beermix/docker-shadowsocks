@@ -1,4 +1,4 @@
-FROM archlinux/base:latest
+FROM archlinux
   
 ENV KCPTUN_VERSION 20200201
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
