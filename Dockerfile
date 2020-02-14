@@ -1,9 +1,9 @@
 FROM alpine:edge
 
-ENV SHADOWSOCKS_VERSION 3.3.4
+ENV SHADOWSOCKS_VERSION 69b79e5
 ENV KCPTUN_VERSION 20200201
 ENV SIMPLE_OBFS_VERSION a9c4358
-ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$SHADOWSOCKS_VERSION/shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz
+ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/$SHADOWSOCKS_VERSION.tar.gz
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
@@ -14,10 +14,7 @@ RUN apk upgrade --update \
   && curl -sSLO "$SHADOWSOCKS_URL" \
   && tar xfz shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
-  && aclocal -I m4 \
-  && autoheader \
-  && autoconf \
-  && automake --add-missing --copy \
+  && ./autogen.sh \
   && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-O1,--sort-common,-z,relro,-z,now -s" --prefix=/usr --disable-documentation --disable-silent-rules --disable-ssp \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
