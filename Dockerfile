@@ -14,7 +14,10 @@ RUN apk upgrade --update \
   && curl -sSLO "$SHADOWSOCKS_URL" \
   && tar xfz shadowsocks-libev-$SHADOWSOCKS_VERSION.tar.gz \
   && cd shadowsocks-libev-$SHADOWSOCKS_VERSION \
-  && aclocal -I m4 && autoheader && autoconf && automake --add-missing --copy \
+  && aclocal -I m4 \
+  && autoheader \
+  && autoconf \
+  && automake --add-missing --copy \
   && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-O1,--sort-common,-z,relro,-z,now -s" --prefix=/usr --disable-documentation --disable-silent-rules --disable-ssp \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
