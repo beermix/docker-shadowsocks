@@ -22,6 +22,7 @@ RUN apk upgrade --update \
   && cd simple-obfs \
   && git checkout -b $SIMPLE_OBFS_VERSION \
   && git submodule update --init --recursive \
+  && ./autogen.sh \
   && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-O1,--sort-common,-z,relro,-z,now -s" --disable-documentation --disable-ssp \
   && make install \
   && cd /tmp \
