@@ -2,7 +2,7 @@ FROM alpine:edge
 
 ENV SHADOWSOCKS_VERSION master
 ENV KCPTUN_VERSION 20200201
-ENV SIMPLE_OBFS_VERSION 486bebd
+ENV SIMPLE_OBFS_VERSION master
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
@@ -20,8 +20,6 @@ RUN apk upgrade --update \
   && cd /tmp \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
-  && git checkout -b $SIMPLE_OBFS_VERSION \
-  && git submodule update --init --recursive \
   && ./autogen.sh \
   && CC='clang' CXX='clang++' ./configure CFLAGS="-march=native -O2 -pipe" CXXFLAGS="-march=native -O2 -pipe" LDFLAGS="-s -Wl,-s" --disable-documentation --disable-silent-rules \
   && make install \
