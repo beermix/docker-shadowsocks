@@ -1,8 +1,8 @@
 FROM alpine:edge
 
-ENV SHADOWSOCKS_VERSION 69b79e5
+ENV SHADOWSOCKS_VERSION master
 ENV KCPTUN_VERSION 20200201
-ENV SIMPLE_OBFS_VERSION a9c4358
+ENV SIMPLE_OBFS_VERSION master
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
