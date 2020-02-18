@@ -14,14 +14,14 @@ RUN apk upgrade --update \
   && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
   && ./autogen.sh \
-  && CC='clang' CXX='clang++' ./configure CFLAGS="-march=native -O2 -pipe" CXXFLAGS="-march=native -O2 -pipe" LDFLAGS="-s -Wl,-s" --prefix=/usr --disable-documentation --disable-silent-rules \
+  && CC='clang' CXX='clang++' ./configure CFLAGS="-march=native -O2 -pipe" CXXFLAGS="-march=native -O2 -pipe" LDFLAGS="-s -Wl,-s" --prefix=/usr --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
   && ./autogen.sh \
-  && CC='clang' CXX='clang++' ./configure CFLAGS="-march=native -O2 -pipe" CXXFLAGS="-march=native -O2 -pipe" LDFLAGS="-s -Wl,-s" --disable-documentation --disable-silent-rules \
+  && CC='clang' CXX='clang++' ./configure CFLAGS="-march=native -O2 -pipe" CXXFLAGS="-march=native -O2 -pipe" LDFLAGS="-s -Wl,-s" --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
   && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
