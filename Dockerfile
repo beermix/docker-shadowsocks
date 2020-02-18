@@ -16,7 +16,7 @@ RUN apk upgrade --update \
   && ./autogen.sh \
   && ./configure CC=clang CXX=clang++ CFLAGS="-march=native -O2 -pipe" CXXFLAGS="-march=native -O2 -pipe" LDFLAGS="-s -Wl,-s" --prefix=/usr --disable-documentation --enable-connmarktos --disable-silent-rules --disable-ssp --disable-assert \
   && make install \
-  && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \a
+  && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
