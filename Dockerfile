@@ -9,7 +9,7 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 
 RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps build-base gcc abuild binutils autoconf automake libtool flex bison curl git gawk sed \
-  alpine-sdk linux-headers udns-dev pcre-dev mbedtls-dev libsodium-dev c-ares-dev libev-dev libcap clang libnetfilter_conntrack libnetfilter_queue \
+  alpine-sdk linux-headers udns-dev pcre-dev mbedtls-dev libsodium-dev c-ares-dev libev-dev libcap clang libnetfilter_conntrack libnetfilter_queue libnetfilter_cthelper libnetfilter_cttimeout\
   && cd /tmp \
   && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
