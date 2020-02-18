@@ -8,8 +8,8 @@ ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 RUN apk upgrade --update \
-  && apk add --no-cache --virtual .build-deps build-base gcc abuild binutils autoconf automake libtool curl git flex bison gawk sed \
-  alpine-sdk linux-headers udns-dev pcre-dev mbedtls-dev libsodium-dev c-ares-dev libev-dev libcap clang \
+  && apk add --no-cache --virtual .build-deps build-base gcc abuild binutils autoconf automake libtool curl git gawk sed \
+  alpine-sdk linux-headers udns-dev pcre-dev mbedtls-dev libsodium-dev c-ares-dev libev-dev libcap clang libnetfilter_conntrack \
   && cd /tmp \
   && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
