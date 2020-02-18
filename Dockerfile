@@ -9,19 +9,19 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 
 RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps build-base gcc abuild binutils autoconf automake libtool flex bison curl git gawk sed \
-  alpine-sdk linux-headers udns-dev pcre-dev mbedtls-dev libsodium-dev c-ares-dev libev-dev libcap clang libnetfilter_conntrack \
+  alpine-sdk linux-headers udns-dev pcre-dev mbedtls-dev libsodium-dev c-ares-dev libev-dev libcap clang libnetfilter_conntrack libnetfilter_queue \
   && cd /tmp \
   && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
   && ./autogen.sh \
-  && ./configure CC=clang CXX=clang++ CFLAGS="-march=native -O2 -pipe" CXXFLAGS="-march=native -O2 -pipe" LDFLAGS="-s -Wl,-s" --prefix=/usr --disable-documentation --enable-connmarktos --disable-silent-rules --disable-ssp --disable-assert \
+  && CC='clang' CXX='clang++' ./configure CFLAGS="-march=native -O2 -pipe" CXXFLAGS="-march=native -O2 -pipe" LDFLAGS="-s -Wl,-s" --prefix=/usr --disable-documentation --enable-connmarktos --disable-silent-rules --disable-ssp --disable-assert \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
   && ./autogen.sh \
-  && ./configure CC=clang CXX=clang++ CFLAGS="-march=native -O2 -pipe" CXXFLAGS="-march=native -O2 -pipe" LDFLAGS="-s -Wl,-s" --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
+  && CC='clang' CXX='clang++' ./configure CFLAGS="-march=native -O2 -pipe" CXXFLAGS="-march=native -O2 -pipe" LDFLAGS="-s -Wl,-s" --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
   && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
