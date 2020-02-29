@@ -1,7 +1,7 @@
 FROM alpine:edge
 
 ENV SHADOWSOCKS_VERSION master
-ENV KCPTUN_VERSION 20200201
+ENV KCPTUN_VERSION 20200226
 ENV SIMPLE_OBFS_VERSION master
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
