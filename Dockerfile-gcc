@@ -8,20 +8,20 @@ ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 RUN apk upgrade --update \
-  && apk add --no-cache --virtual .build-deps build-base gcc abuild binutils autoconf automake libtool flex bison curl git gawk sed \
-  alpine-sdk linux-headers udns-dev pcre-dev mbedtls-dev libsodium-dev c-ares-dev libev-dev libcap libnetfilter_conntrack libnetfilter_queue libnetfilter_cthelper libnetfilter_cttimeout\
+  && apk add --no-cache --virtual .build-deps build-base gcc abuild binutils autoconf automake libtool curl git gawk sed \
+  linux-headers udns-dev pcre-dev mbedtls-dev libsodium-dev c-ares-dev libev-dev libcap libnetfilter_conntrack libnetfilter_queue libnetfilter_cthelper libnetfilter_cttimeout \
   && cd /tmp \
   && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
   && ./autogen.sh \
-  && ./configure CFLAGS="-march=native -O2 -pipe" CXXFLAGS="-march=native -O2 -pipe" LDFLAGS="-s -Wl,-s" --prefix=/usr --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
+  && ./configure LDFLAGS="-s -Wl,-s" --prefix=/usr --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
   && ./autogen.sh \
-  && ./configure CFLAGS="-march=native -O2 -pipe" CXXFLAGS="-march=native -O2 -pipe" LDFLAGS="-s -Wl,-s" --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
+  && ./configure LDFLAGS="-s -Wl,-s" --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
   && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
