@@ -17,7 +17,7 @@ else
 fi
 
 echo "Starting Shadowsocks Server on port $SHADOWSOCKS_PORT with crypto $SHADOWSOCKS_CRYPTO..."
-ss-server -s 0.0.0.0 -p "$SHADOWSOCKS_PORT" -k "$SHADOWSOCKS_PASSWORD" -m "$SHADOWSOCKS_CRYPTO" --fast-open --reuse-port -d 1.0.0.1 &
+ss-server -s 0.0.0.0 -p "$SHADOWSOCKS_PORT" -k "$SHADOWSOCKS_PASSWORD" -m "$SHADOWSOCKS_CRYPTO" --fast-open --reuse-port --no-delay -u-d 1.0.0.1 &
 
 echo "Starting Obfs Server on port $OBFS_PORT over $SHADOWSOCKS_PORT with protocol $OBFS_PROTOCOL..."
 obfs-server -r "127.0.0.1:$SHADOWSOCKS_PORT" -p "$OBFS_PORT" --obfs "$OBFS_PROTOCOL" --fast-open
