@@ -7,10 +7,9 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 
 RUN apk upgrade --update && apk add --no-cache --virtual .build-deps build-base alpine-sdk cmake linux-headers ca-certificates udns-dev pcre-dev zlib-dev libcap autoconf automake autoconf-archive c-ares-dev libtool curl git wget gawk libev-dev mbedtls-static mbedtls-dev libsodium-dev udns-dev pcre-dev c-ares-dev \
   && cd /tmp \
-  && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
+  && git clone --recursive "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=OFF -DWITH_DOC_MAN=OFF -DWITH_SS_REDIR=OFF -DBUILD_STATIC=OFF -DCMAKE_VERBOSE_MAKEFILE=ON \
-  && make \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DBUILD_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=1 . && make && make install \
   && strip -s /usr/bin/ss-server \
   && rm /usr/bin/ss-manager /usr/bin/ss-tunnel /usr/bin/ss-local \
   && cd /tmp \
