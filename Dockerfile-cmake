@@ -16,15 +16,15 @@ RUN apk upgrade --update \
    && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
-  && ./configure --prefix=/usr --enable-opt --disable-ssp --enable-minimal \
+  && ./configure --prefix=/usr --enable-opt --disable-ssp --enable-minimal --disable-shared \
   && make install \
   && cd /tmp \
   && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
-  && ./autogen.sh \
-  && ./configure --prefix=/usr --disable-documentation --disable-ssp --disable-assert \
-  && make install \
-  && strip -s /usr/bin/ss-server \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=OFF -DWITH_DOC_MAN=OFF -DWITH_SS_REDIR=OFF \
+  && make \
+  && strip -s ./bin/ss-server \
+  && cp ./bin/ss-server /usr/bin/ss-server \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
