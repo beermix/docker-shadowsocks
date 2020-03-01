@@ -22,9 +22,9 @@ RUN apk upgrade --update \
   && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
   && ./autogen.sh \
-  && --prefix=/usr --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
-  && strip -s /usr/local/bin/ss-server \
+  && ./configure --prefix=/usr --disable-documentation --disable-ssp --disable-assert \
   && make install \
+  && strip -s /usr/bin/ss-server \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
