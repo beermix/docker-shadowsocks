@@ -31,8 +31,8 @@ RUN apk upgrade --update \
   && cd simple-obfs \
   && ./autogen.sh \
   && ./configure --disable-documentation --disable-ssp --disable-assert \
-  && strip -s /usr/local/bin/obfs-* \
   && make install \
+  && strip -s /usr/local/bin/obfs-* \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
   && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
