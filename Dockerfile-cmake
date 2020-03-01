@@ -7,8 +7,8 @@ ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
-  RUN apk upgrade --update \ 
-  && apk add --no-cache --virtual .build-deps build-base gcc binutils abuild alpine-sdk cmake linux-headers ca-certificates sed \
+  RUN apk upgrade --update \
+  && apk add --no-cache --virtual .build-deps build-base gcc binutils abuild alpine-sdk cmake linux-headers ca-certificates sed flex bison m4 \
   libcap autoconf automake libtool curl git wget gawk libev-dev mbedtls-static mbedtls-dev libsodium-dev udns-dev pcre-dev c-ares-dev \
   libnetfilter_conntrack libnetfilter_queue \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
