@@ -1,10 +1,10 @@
-FROM alpine
+FROM alpine:edge
 
 ENV SHADOWSOCKS_VERSION master
 ENV KCPTUN_VERSION 20200226
 ENV SIMPLE_OBFS_VERSION master
-ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
-ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
+ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev
+ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 RUN apk upgrade --update \
@@ -12,9 +12,9 @@ RUN apk upgrade --update \
   udns-dev pcre-dev zlib-dev libcap autoconf automake autoconf-archive c-ares-dev libtool curl git wget gawk libev-dev mbedtls-static mbedtls-dev libsodium-dev udns-dev pcre-dev c-ares-dev \
   && cd /tmp \
   && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
-  && cd shadowsocks-libev \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=1 -DWITH_SS_REDIR=0 -DBUILD_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
-  && make install \
+  && cd shadowsocks-libev/build \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=OFF -DWITH_DOC_MAN=OFF -DWITH_SS_REDIR=OFF -DBUILD_STATIC=OFF -DCMAKE_VERBOSE_MAKEFILE=ON .. \
+  && make \
   && strip -s /usr/bin/ss-server \
   && rm /usr/bin/ss-manager /usr/bin/ss-tunnel /usr/bin/ss-local \
   && cd /tmp \
