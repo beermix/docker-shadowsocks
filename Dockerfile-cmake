@@ -10,13 +10,14 @@ ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 RUN apk upgrade --update \
-  && apk add --no-cache --virtual .build-deps build-base gcc abuild binutils autoconf automake libtool flex bison curl git gawk sed \
-  alpine-sdk linux-headers udns-dev pcre-dev mbedtls-dev libsodium-dev c-ares-dev libev-dev libcap clang libnetfilter_conntrack libnetfilter_queue libnetfilter_cthelper libnetfilter_cttimeout alpine-sdk cmake \
+RUN apk add --no-cache --virtual .build-deps \
+    alpine-sdk cmake \
+    linux-headers libev-dev libsodium-dev mbedtls-static mbedtls-dev pcre-dev udns-dev \
   && cd /tmp \
-   && curl -sSLO "$LIBSODIUM_URL" \
+  && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
-  && ./configure --prefix=/usr --enable-opt --disable-ssp --enable-minimal --disable-shared \
+  && ./configure --prefix=/usr --enable-opt --disable-ssp --enable-minimal --enable-shared --enable-static \
   && make install \
   && cd /tmp \
   && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
