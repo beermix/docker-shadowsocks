@@ -16,7 +16,7 @@ RUN apk upgrade --update \
   && ./autogen.sh \
   && ./configure  --prefix=/usr --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
   && make install \
-  && strip -s /usr/bin/ss-* \
+  && strip -s /usr/bin/ss-server \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
