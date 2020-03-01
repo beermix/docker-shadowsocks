@@ -19,9 +19,11 @@ RUN apk upgrade --update \
   && ./configure --prefix=/usr --enable-opt --disable-ssp --enable-minimal \
   && make install \
   && cd /tmp \
-  && git clone --recursive "$SHADOWSOCKS_URL" \
-  && cd shadowsocks-libev/build \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=1 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=1 .. \
+  && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
+  && cd shadowsocks-libev \
+  && ./autogen.sh \
+  && --prefix=/usr --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
+  && strip -s /usr/local/bin/ss-server \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
@@ -29,6 +31,7 @@ RUN apk upgrade --update \
   && cd simple-obfs \
   && ./autogen.sh \
   && ./configure --disable-documentation --disable-ssp --disable-assert \
+  && strip -s /usr/local/bin/obfs-* \
   && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
