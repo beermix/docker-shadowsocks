@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine
 
 ENV SHADOWSOCKS_VERSION master
 ENV KCPTUN_VERSION 20200226
@@ -9,9 +9,9 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 
   RUN apk upgrade --update \ 
   && apk add --no-cache --virtual .build-deps build-base gcc binutils abuild alpine-sdk cmake linux-headers ca-certificates sed \
-  libcap autoconf automake  libtool curl git wget gawk \
-  libev-dev mbedtls-static mbedtls-dev libsodium-dev udns-dev pcre-dev c-ares-dev \
+  libcap autoconf automake libtool curl git wget gawk libev-dev mbedtls-static mbedtls-dev libsodium-dev udns-dev pcre-dev c-ares-dev \
   libnetfilter_conntrack libnetfilter_queue \
+  && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
   && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
