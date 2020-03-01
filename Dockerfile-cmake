@@ -24,8 +24,7 @@ RUN apk upgrade --update \
   && cd shadowsocks-libev \
   && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=1 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
   && make install \
-  && strip -s /usr/bin/ss-server \
-  && rm /usr/bin/ss-manager /usr/bin/ss-tunnel /usr/bin/ss-local \
+  && strip -s /usr/bin/ss-server /usr/bin/ss-tunnel /usr/bin/ss-local \
   && cd /tmp \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
@@ -39,7 +38,7 @@ RUN apk upgrade --update \
   && mv server_linux_amd64 /usr/bin/kcptun-server \
   && mv client_linux_amd64 /usr/bin/kcptun-client \
   && runDeps="$( \
-      scanelf --needed --nobanner /usr/bin/ss-server /usr/local/bin/obfs-* \
+      scanelf --needed --nobanner /usr/bin/ss-* /usr/local/bin/obfs-* \
         | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
         | xargs -r apk info --installed \
         | sort -u \
