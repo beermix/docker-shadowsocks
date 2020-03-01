@@ -10,9 +10,8 @@ ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 RUN apk upgrade --update \
-  && apk add --no-cache --virtual .build-deps build-base alpine-sdk cmake linux-headers ca-certificates \
-  udns-dev pcre-dev zlib-dev mbedtls-dev c-ares-dev libev-dev libcap autoconf automake libtool curl git wget gawk \
-  && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
+  && apk add --no-cache --virtual .build-deps build-base gcc abuild binutils autoconf automake libtool flex bison curl git gawk sed \
+  alpine-sdk linux-headers udns-dev pcre-dev mbedtls-dev libsodium-dev c-ares-dev libev-dev libcap clang libnetfilter_conntrack libnetfilter_queue libnetfilter_cthelper libnetfilter_cttimeout alpine-sdk cmake \
   && cd /tmp \
    && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
@@ -21,10 +20,9 @@ RUN apk upgrade --update \
   && make install \
   && cd /tmp \
   && git clone --recursive "$SHADOWSOCKS_URL" \
-  && cd shadowsocks-libev \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=1 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=1 \
+  && cd shadowsocks-libev/build \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=1 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=1 .. \
   && make install \
-  && strip -s /usr/bin/ss-server \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
@@ -32,7 +30,6 @@ RUN apk upgrade --update \
   && ./autogen.sh \
   && ./configure --disable-documentation --disable-ssp --disable-assert \
   && make install \
-  && strip -s /usr/local/bin/obfs-* \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
   && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
