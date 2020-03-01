@@ -22,10 +22,10 @@ RUN apk upgrade --update \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
   && ./autogen.sh \
-  && ./configure  --prefix=/usr --disable-documentation --disable-ssp --disable-assert \
+  && ./configure --disable-documentation --disable-ssp --disable-assert \
   && make \
   && make install \
-  && strip -s /usr/bin/obfs-* \
+  && strip -s /usr/local/bin/obfs-* \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
   && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
