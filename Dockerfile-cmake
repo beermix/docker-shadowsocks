@@ -8,14 +8,14 @@ ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
   RUN apk upgrade --update \ 
-  && apk add --no-cache --virtual .build-deps build-base abuild alpine-sdk cmake linux-headers ca-certificates sed \
-  zlib-dev libcap autoconf automake  libtool curl git wget gawk \
+  && apk add --no-cache --virtual .build-deps build-base gcc binutils abuild alpine-sdk cmake linux-headers ca-certificates sed \
+  libcap autoconf automake  libtool curl git wget gawk \
   libev-dev mbedtls-static mbedtls-dev libsodium-dev udns-dev pcre-dev c-ares-dev \
   libnetfilter_conntrack libnetfilter_queue \
   && cd /tmp \
   && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=1 -DWITH_SS_REDIR=0 -DCMAKE_VERBOSE_MAKEFILE=1 \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_SS_REDIR=0 -DCMAKE_VERBOSE_MAKEFILE=1 \
   && make \
   && strip -s ./bin/ss-server \
   && cp ./bin/ss-server /usr/bin/ss-server \
