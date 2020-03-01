@@ -14,15 +14,17 @@ RUN apk upgrade --update \
   && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
   && ./autogen.sh \
-  && ./configure LDFLAGS="-s -Wl,-s" --prefix=/usr --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
+  && ./configure  --prefix=/usr --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
   && make install \
+  && strip -s /usr/bin/ss-* \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
   && ./autogen.sh \
-  && ./configure LDFLAGS="-s -Wl,-s" --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
+  && ./configure  --prefix=/usr --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
   && make install \
+  && strip -s /usr/bin/obfs-* \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
   && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
