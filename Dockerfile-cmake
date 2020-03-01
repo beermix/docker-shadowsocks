@@ -9,10 +9,10 @@ ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
-RUN apk upgrade --update \
-  && apk add --no-cache --virtual .build-deps build-base gcc abuild binutils autoconf automake libtool curl git gawk sed \
-  linux-headers libev-dev mbedtls-static mbedtls-dev pcre-dev udns-dev alpine-sdk cmake \
-  c-ares-dev libcap libnetfilter_conntrack libnetfilter_queue libnetfilter_cthelper libnetfilter_cttimeout \
+  RUN apk upgrade --update \
+  && apk add --no-cache --virtual .build-deps build-base abuild alpine-sdk cmake linux-headers ca-certificates sed \
+  udns-dev pcre-dev zlib-dev libcap autoconf automake c-ares-dev libtool curl git wget gawk libev-dev mbedtls-static mbedtls-dev \
+  libnetfilter_conntrack libnetfilter_queue libnetfilter_cthelper libnetfilter_cttimeout \
   && cd /tmp \
   && curl -sSLO "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
