@@ -1,28 +1,21 @@
 FROM alpine:edge
 
-ENV LIBSODIUM_VERSION 1.0.18
 ENV SHADOWSOCKS_VERSION master
 ENV KCPTUN_VERSION 20200226
 ENV SIMPLE_OBFS_VERSION master
-ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSION-RELEASE/libsodium-$LIBSODIUM_VERSION.tar.gz
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
-  RUN apk upgrade --update \
+  RUN apk upgrade --update \ 
   && apk add --no-cache --virtual .build-deps build-base abuild alpine-sdk cmake linux-headers ca-certificates sed \
-  udns-dev pcre-dev zlib-dev libcap autoconf automake c-ares-dev libtool curl git wget gawk libev-dev mbedtls-static mbedtls-dev \
-  libnetfilter_conntrack libnetfilter_queue libnetfilter_cthelper libnetfilter_cttimeout \
-  && cd /tmp \
-  && curl -sSLO "$LIBSODIUM_URL" \
-  && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
-  && cd libsodium-$LIBSODIUM_VERSION \
-  && ./configure --prefix=/usr --enable-opt --disable-ssp --enable-minimal --enable-shared --enable-static \
-  && make install \
+  zlib-dev libcap autoconf automake  libtool curl git wget gawk \
+  libev-dev mbedtls-static mbedtls-dev libsodium-dev udns-dev pcre-dev c-ares-dev \
+  libnetfilter_conntrack libnetfilter_queue \
   && cd /tmp \
   && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=1 -DWITH_SS_REDIR=0 -DWITH_STATIC=1 -DCMAKE_VERBOSE_MAKEFILE=0 \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=1 -DWITH_SS_REDIR=0 -DWITH_STATIC=1 -DCMAKE_VERBOSE_MAKEFILE=1 \
   && make \
   && strip -s ./bin/ss-server \
   && cp ./bin/ss-server /usr/bin/ss-server \
