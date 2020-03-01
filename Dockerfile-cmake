@@ -10,9 +10,9 @@ RUN apk upgrade --update \
   && cd /tmp \
   && git clone --recursive "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DBUILD_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=1 . && make && make install \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DBUILD_STATIC=0 -DWITH_EMBEDDED_SRC=1 -DCMAKE_VERBOSE_MAKEFILE=1 \
+  && make && make install \
   && strip -s /usr/bin/ss-server \
-  && rm /usr/bin/ss-manager /usr/bin/ss-tunnel /usr/bin/ss-local \
   && cd /tmp \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
