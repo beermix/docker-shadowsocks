@@ -5,7 +5,7 @@ ENV SHADOWSOCKS_VERSION master
 ENV KCPTUN_VERSION 20200226
 ENV SIMPLE_OBFS_VERSION master
 ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSION-RELEASE/libsodium-$LIBSODIUM_VERSION.tar.gz
-ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev
+ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
@@ -20,11 +20,12 @@ RUN apk upgrade --update \
   && ./configure --prefix=/usr --enable-opt --disable-ssp --enable-minimal \
   && make install \
   && cd /tmp \
-  && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
+  && git clone --recursive "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=1 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=1 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=1 \
   && make install \
-  && strip -s /usr/bin/ss-server /usr/bin/ss-tunnel /usr/bin/ss-local \
+  && strip -s /usr/bin/ss-server \
+  && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
