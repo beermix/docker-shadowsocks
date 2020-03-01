@@ -12,7 +12,7 @@ ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 RUN apk upgrade --update \
-  && apk add --no-cache --virtual .build-deps build-base alpine-sdk cmake linux-headers \
+  && apk add --no-cache --virtual .build-deps build-base alpine-sdk cmake linux-headers ca-certificates \
   udns-dev pcre-dev zlib-dev libcap autoconf automake autoconf-archive c-ares-dev libtool curl git wget gawk libev-dev \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
