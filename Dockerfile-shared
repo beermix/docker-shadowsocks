@@ -14,7 +14,7 @@ RUN apk upgrade --update \
   && cd shadowsocks-libev \
   && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
   && ./autogen.sh \
-  && ./configure CFLAGS="-march=native -O3-pipe -fno-plt" CXXFLAGS="-march=native -O3 -pipe -fno-plt" LDFLAGS="-Wl,-O1,--sort-common,-z,relro,-z,now" --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-silent-rules \
+  && ./configure CFLAGS="-march=native -O3 -pipe -fno-plt" CXXFLAGS="-march=native -O3 -pipe -fno-plt" LDFLAGS="-Wl,-O1,--sort-common,-z,relro,-z,now" --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-silent-rules \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
