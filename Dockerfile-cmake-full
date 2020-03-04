@@ -1,11 +1,11 @@
-FROM alpine
+FROM alpine:edge
 
 ENV MBEDTLS_VERSION 2.16.5
 ENV LIBSODIUM_VERSION 1.0.18
 ENV SHADOWSOCKS_VERSION master
 ENV KCPTUN_VERSION 20200226
 ENV SIMPLE_OBFS_VERSION master
-ENV MBEDTLS_URL=https://tls.mbed.org/download/start/mbedtls-$MBEDTLS_VERSION-gpl.tgz
+ENV MBEDTLS_URL=https://tls.mbed.org/download/mbedtls-$MBEDTLS_VERSION-gpl.tgz
 ENV LIBSODIUM_URL https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSION-RELEASE/libsodium-$LIBSODIUM_VERSION.tar.gz
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
@@ -16,7 +16,7 @@ RUN apk upgrade --update \
   udns-dev pcre-dev zlib-dev libcap autoconf automake autoconf-archive c-ares-dev libtool curl git wget gawk libev-dev \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
-  && curl -sSLO "$MBEDTLS_URL" \
+  && wget --no-check-certificate "$MBEDTLS_URL" \
   && tar xfz mbedtls-$MBEDTLS_VERSION-gpl.tgz \
   && cd mbedtls-$MBEDTLS_VERSION \
   && sed -i -e 's|//\(#define MBEDTLS_THREADING_C\)|\1|' -e 's|//\(#define MBEDTLS_THREADING_PTHREAD\)|\1|' include/mbedtls/config.h \
@@ -30,7 +30,7 @@ RUN apk upgrade --update \
   && ./configure --prefix=/usr --enable-opt --enable-minimal \
   && make install \
   && cd /tmp \
-  && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
+  && git clone "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
   && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
   && make install \
