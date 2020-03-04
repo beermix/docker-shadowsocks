@@ -27,7 +27,7 @@ RUN apk upgrade --update \
   && wget --no-check-certificate "$LIBSODIUM_URL" \
   && tar xfz libsodium-$LIBSODIUM_VERSION.tar.gz \
   && cd libsodium-$LIBSODIUM_VERSION \
-  && ./configure --prefix=/usr --enable-opt --disable-ssp --enable-minimal \
+  && ./configure --prefix=/usr --enable-opt --enable-minimal \
   && make install \
   && cd /tmp \
   && git clone --recursive --depth 1 "$SHADOWSOCKS_URL" \
