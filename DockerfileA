@@ -1,21 +1,20 @@
 FROM archlinux
   
-ENV KCPTUN_VERSION 20200201
-ENV SIMPLE_OBFS_VERSION 486bebd
+ENV KCPTUN_VERSION 20200226
+ENV SIMPLE_OBFS_VERSION master
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 ADD pacman.conf /etc/pacman.conf
 ADD mirrorlist  /etc/pacman.d/mirrorlist
 
-RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S git autoconf automake gcc binutils libtool make pkgconf libtool curl git flex bison gawk sed libcap udns pcre mbedtls libsodium c-ares libev libcorkipset libbloom linux-headers \
+RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S git cmake autoconf automake gcc binutils libtool make pkgconf libtool curl git flex bison gawk sed libcap udns pcre mbedtls libsodium c-ares libev libcorkipset libbloom linux-headers \
   && cd /tmp \
-  && git clone --depth 1 https://github.com/shadowsocks/shadowsocks-libev \
+  && git clone "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
-  && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
-  && ./autogen.sh \
-  && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-O1,--sort-common,-z,relro,-z,now -s" --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-silent-rules --disable-ssp \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
   && make install \
+  && strip -s /usr/bin/ss-server \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
@@ -23,7 +22,7 @@ RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S git autoconf 
   && git checkout -b v$SIMPLE_OBFS_VERSION \
   && git submodule update --init --recursive \
   && ./autogen.sh \
-   && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CXXFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-O1,--sort-common,-z,relro,-z,now -s" --disable-documentation  --disable-silent-rules --disable-ssp \
+   && ./configure --disable-documentation --disable-silent-rules --disable-ssp \
   && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
