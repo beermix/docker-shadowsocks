@@ -1,7 +1,7 @@
 FROM archlinux
 
 ENV KCPTUN_VERSION 20200226
-ENV SIMPLE_OBFS_VERSION master
+ENV SIMPLE_OBFS_VERSION v0.0.5
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
@@ -19,7 +19,7 @@ RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S git cmake aut
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
   && cd simple-obfs \
-  && git checkout -b v$SIMPLE_OBFS_VERSION \
+  && git checkout -b $SIMPLE_OBFS_VERSION \
   && git submodule update --init --recursive \
   && ./autogen.sh \
    && ./configure --disable-documentation --disable-silent-rules --disable-ssp \
