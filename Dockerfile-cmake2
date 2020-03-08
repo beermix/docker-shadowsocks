@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine
 
 ENV SHADOWSOCKS_VERSION master
 ENV KCPTUN_VERSION 20200226
@@ -25,7 +25,7 @@ RUN apk upgrade --update \
   && git checkout $SIMPLE_OBFS_VERSION \
   && git submodule update --init --recursive \
   && ./autogen.sh \
-  && ./configure --disable-documentation --disable-ssp --disable-assert \
+  && ./configure --disable-documentation \
   && make install \
   && strip -s /usr/local/bin/obfs-* \
   && cd /tmp \
