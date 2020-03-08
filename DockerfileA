@@ -12,9 +12,9 @@ ADD mirrorlist  /etc/pacman.d/mirrorlist
 
 RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S git cmake autoconf automake gcc binutils libtool make pkgconf libtool curl git flex bison gawk sed libcap udns pcre mbedtls libsodium c-ares libev libcorkipset libbloom linux-headers \
   && cd /tmp \
-  && git clone "$SHADOWSOCKS_URL" \
-  && git checkout $SHADOWSOCKS_VERSION \
+  && git clone $SHADOWSOCKS_URL \
   && cd shadowsocks-libev \
+  && git checkout $SHADOWSOCKS_VERSION \
   && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
   && make install \
   && strip -s /usr/bin/ss-server \
