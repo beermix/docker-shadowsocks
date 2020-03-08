@@ -25,7 +25,7 @@ RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S git cmake aut
   && git checkout $SIMPLE_OBFS_VERSION \
   && git submodule update --init --recursive \
   && ./autogen.sh \
-  && ./configure --disable-documentation --disable-assert \
+  && ./configure --disable-documentation --disable-ssp \
   && make install \
   && strip -s /usr/local/bin/obfs-* \
   && cd /tmp \
