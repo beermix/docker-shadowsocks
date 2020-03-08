@@ -2,9 +2,9 @@ FROM archlinux
 
 ENV SHADOWSOCKS_VERSION master
 ENV KCPTUN_VERSION 20200226
-ENV SIMPLE_OBFS_VERSION 486bebd
+ENV SIMPLE_OBFS_VERSION master
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev
-ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
+ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 ADD pacman.conf /etc/pacman.conf
@@ -32,7 +32,7 @@ RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S git cmake aut
   && mv server_linux_amd64 /usr/bin/kcptun-server \
   && mv client_linux_amd64 /usr/bin/kcptun-client \
   && runDeps="$( \
-      scanelf --needed --nobanner /usr/bin/ss-* /usr/local/bin/obfs-* \
+      scanelf --needed --nobanner /usr/bin/ss-server /usr/local/bin/obfs-* \
         | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
         | xargs -r pacman -Qqe \
         | sort -u \
