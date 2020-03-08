@@ -10,7 +10,7 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 ADD pacman.conf /etc/pacman.conf
 ADD mirrorlist  /etc/pacman.d/mirrorlist
 
-RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S git cmake autoconf automake gcc binutils libtool make pkgconf libtool curl git flex bison gawk sed libcap udns pcre mbedtls libsodium c-ares libev libcorkipset libbloom linux-headers patch \
+RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S git cmake autoconf automake gcc binutils libtool make pkgconf libtool curl git flex bison gawk sed libcap udns pcre mbedtls libsodium c-ares libev libcorkipset libbloom linux-headers patch gettext \
   && cd /tmp \
   && git clone --depth 1 $SHADOWSOCKS_URL \
   && cd shadowsocks-libev \
