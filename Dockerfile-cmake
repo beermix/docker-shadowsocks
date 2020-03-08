@@ -1,4 +1,4 @@
-FROM alpine:20200122
+FROM alpine:edge
 
 ENV KCPTUN_VERSION 20200226
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
@@ -10,7 +10,7 @@ RUN apk upgrade --update \
   && cd /tmp \
   && git clone --recursive "$SHADOWSOCKS_URL" \
   && cd shadowsocks-libev \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DBUILD_STATIC=0 -DWITH_EMBEDDED_SRC=1 -DCMAKE_VERBOSE_MAKEFILE=1 \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DBUILD_STATIC=0 -DWITH_EMBEDDED_SRC=0 -DCMAKE_VERBOSE_MAKEFILE=1 \
   && make && make install \
   && strip -s /usr/bin/ss-server \
   && cd /tmp \
