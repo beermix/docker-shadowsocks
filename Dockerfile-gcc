@@ -22,7 +22,7 @@ RUN apk upgrade --update \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
   && ./autogen.sh \
-  && ./configure  --prefix=/usr --disable-documentation --disable-silent-rules --disable-ssp --disable-assert \
+  && ./configure  --prefix=/usr --disable-documentation --disable-silent-rules --disable-assert \
   && make install \
   && strip -s /usr/bin/obfs-* \
   && cd /tmp \
