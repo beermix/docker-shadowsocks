@@ -12,7 +12,7 @@ RUN apk upgrade --update \
   udns-dev pcre-dev zlib-dev libcap autoconf automake c-ares-dev libtool git gawk libev-dev mbedtls-static mbedtls-dev libsodium-dev \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
-  && git clone $SHADOWSOCKS_URL \
+  && git clone --recursive --depth 1 $SHADOWSOCKS_URL \
   && cd shadowsocks-libev \
   && git checkout $SHADOWSOCKS_VERSION \
   && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
@@ -20,10 +20,9 @@ RUN apk upgrade --update \
   && strip -s /usr/bin/ss-server \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
-  && git clone $SIMPLE_OBFS_URL \
+  && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
   && git checkout $SIMPLE_OBFS_VERSION \
-  && git submodule update --init --recursive \
   && ./autogen.sh \
   && ./configure --disable-documentation --disable-documentation --disable-ssp \
   && make install \
