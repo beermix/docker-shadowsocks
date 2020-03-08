@@ -2,7 +2,7 @@ FROM alpine:edge
 
 ENV SHADOWSOCKS_VERSION master
 ENV KCPTUN_VERSION 20200226
-ENV SIMPLE_OBFS_VERSION master
+ENV SIMPLE_OBFS_VERSION v0.0.5
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
@@ -13,26 +13,28 @@ RUN apk upgrade --update \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
   && git clone "$SHADOWSOCKS_URL" \
+  && git checkout $SHADOWSOCKS_VERSION \
   && cd shadowsocks-libev \
   && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
   && make install \
   && strip -s /usr/bin/ss-server \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
-  && rm /usr/bin/ss-manager /usr/bin/ss-tunnel /usr/bin/ss-local \
   && cd /tmp \
-  && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
+  && git clone $SIMPLE_OBFS_URL \
   && cd simple-obfs \
+  && git checkout $SIMPLE_OBFS_VERSION \
+  && git submodule update --init --recursive \
   && ./autogen.sh \
   && ./configure --disable-documentation --disable-ssp --disable-assert \
   && make install \
   && strip -s /usr/local/bin/obfs-* \
   && cd /tmp \
-  && wget --no-check-certificate $KCPTUN_URL \
+  && curl -sSLO $KCPTUN_URL \
   && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
   && mv server_linux_amd64 /usr/bin/kcptun-server \
   && mv client_linux_amd64 /usr/bin/kcptun-client \
   && runDeps="$( \
-      scanelf --needed --nobanner /usr/bin/ss-server /usr/local/bin/obfs-* \
+      scanelf --needed --nobanner /usr/bin/ss-* /usr/local/bin/obfs-* \
         | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
         | xargs -r apk info --installed \
         | sort -u \

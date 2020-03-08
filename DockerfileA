@@ -1,7 +1,9 @@
 FROM archlinux
 
+ENV SHADOWSOCKS_VERSION master
 ENV KCPTUN_VERSION 20200226
 ENV SIMPLE_OBFS_VERSION v0.0.5
+ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
@@ -10,7 +12,8 @@ ADD mirrorlist  /etc/pacman.d/mirrorlist
 
 RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S git cmake autoconf automake gcc binutils libtool make pkgconf libtool curl git flex bison gawk sed libcap udns pcre mbedtls libsodium c-ares libev libcorkipset libbloom linux-headers \
   && cd /tmp \
-  && git clone https://github.com/shadowsocks/shadowsocks-libev \
+  && git clone "$SHADOWSOCKS_URL" \
+  && git checkout $SHADOWSOCKS_VERSION \
   && cd shadowsocks-libev \
   && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
   && make install \
@@ -19,11 +22,12 @@ RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S git cmake aut
   && cd /tmp \
   && git clone $SIMPLE_OBFS_URL \
   && cd simple-obfs \
-  && git checkout -b $SIMPLE_OBFS_VERSION \
+  && git checkout $SIMPLE_OBFS_VERSION \
   && git submodule update --init --recursive \
   && ./autogen.sh \
-   && ./configure --disable-documentation --disable-silent-rules --disable-ssp \
+  && ./configure --disable-documentation --disable-ssp --disable-assert \
   && make install \
+  && strip -s /usr/local/bin/obfs-* \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
   && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
