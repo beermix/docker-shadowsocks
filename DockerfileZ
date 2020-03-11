@@ -6,22 +6,23 @@ ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 RUN apk upgrade --update \
-  && apk add --no-cache --virtual .build-deps build-base flex bison linux-headers ca-certificates \
-  udns-dev pcre-dev zlib-dev autoconf automake c-ares-dev libtool git gawk libev-dev mbedtls-static mbedtls-dev libsodium-dev patch curl \
+  && apk add --no-cache --virtual .build-deps build-base flex bison alpine-sdk linux-headers ca-certificates \
+  udns-dev pcre-dev zlib-dev libcap autoconf automake c-ares-dev libtool git gawk libev-dev mbedtls-static mbedtls-dev libsodium-dev patch curl \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
   && git clone --depth 1 $SHADOWSOCKS_URL \
   && cd shadowsocks-libev \
   && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
   && ./autogen.sh \
-  && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-O1,--gc-sections,--sort-common,--as-needed,-z,relro,-z,now -s" --prefix=/usr --disable-documentation --enable-system-shared-lib --disable-silent-rules --disable-ssp \
+  && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now -s" --prefix=/usr --disable-documentation --enable-system-shared-lib --disable-silent-rules --disable-ssp \
   && make install \
+  && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
   && patch -p1 -i debian/patches/0001-Use-libcork-dev-in-system.patch \
   && ./autogen.sh \
-  && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-O1,--gc-sections,--sort-common,--as-needed,-z,relro,-z,now -s" --disable-documentation --disable-ssp \
+  && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now -s" --disable-documentation --disable-ssp \
   && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
