@@ -1,5 +1,7 @@
 FROM alpine:edge
 
+ENV SHADOWSOCKS_VERSION v3.3.4
+ENV SIMPLE_OBFS_VERSION 486bebd
 ENV KCPTUN_VERSION 20200226
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
@@ -10,8 +12,9 @@ RUN apk upgrade --update \
   udns-dev pcre-dev zlib-dev libcap autoconf automake c-ares-dev libtool git gawk libev-dev mbedtls-static mbedtls-dev libsodium-dev patch curl \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
-  && git clone --depth 1 $SHADOWSOCKS_URL \
+  && git clone $SHADOWSOCKS_URL \
   && cd shadowsocks-libev \
+  && git checkout $SHADOWSOCKS_VERSION \
   && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
   && ./autogen.sh \
   && ./configure CFLAGS="-march=native -O2 -pipe -fstack-protector-strong -fno-plt" CPPFLAGS="-D_FORTIFY_SOURCE=2" LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now -s" --prefix=/usr --disable-documentation --enable-system-shared-lib --disable-silent-rules --disable-ssp \
