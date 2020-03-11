@@ -3,7 +3,6 @@ FROM alpine:edge
 ENV SHADOWSOCKS_VERSION master
 ENV SIMPLE_OBFS_VERSION 486bebd
 ENV KCPTUN_VERSION 20200226
-ENV SIMPLE_OBFS_VERSION master
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
@@ -24,7 +23,7 @@ RUN apk upgrade --update \
   && cd simple-obfs \
   && patch -p1 -i debian/patches/0001-Use-libcork-dev-in-system.patch \
   && ./autogen.sh \
-  && ./configure --disable-documentation \
+  && ./configure --disable-documentation --disable-ssp \
   && make install \
   && strip -s /usr/local/bin/obfs-* \
   && cd /tmp \
