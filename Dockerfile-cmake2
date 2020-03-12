@@ -3,8 +3,8 @@ FROM alpine:edge
 ENV SHADOWSOCKS_VERSION master
 ENV SIMPLE_OBFS_VERSION 486bebd
 ENV KCPTUN_VERSION 20200226
-ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev
-ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs
+ENV SHADOWSOCKS_URL https://salsa.debian.org/bridges-team/shadowsocks-libev.git
+ENV SIMPLE_OBFS_URL https://salsa.debian.org/bridges-team/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 RUN apk upgrade --update \
@@ -22,8 +22,10 @@ RUN apk upgrade --update \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
   && patch -p1 -i debian/patches/0001-Use-libcork-dev-in-system.patch \
+  && patch -p1 -i 0005-fix-compile-warning-with-GCC8.patch \
+  && patch -p1 -i 0006-Fix-FTBFS-under-GCC-9.patch \
   && ./autogen.sh \
-  && ./configure --disable-documentation \
+  && ./configure --disable-documentation --disable-dependency-tracking --disable-ssp \
   && make && make install \
   && strip -s /usr/local/bin/obfs-* \
   && cd /tmp \
