@@ -14,18 +14,18 @@ RUN apk upgrade --update \
   && cd /tmp \
   && git clone --depth 1 $SHADOWSOCKS_URL \
   && cd shadowsocks-libev \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
+  && CFLAGS="-D_FORTIFY_SOURCE=2 -fstack-protector-strong -fPIE -pie -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=1 \
   && make && make install \
   && strip -s /usr/bin/ss-server \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
-  && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
+  && git clone --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
   && patch -p1 -i debian/patches/0001-Use-libcork-dev-in-system.patch \
-  && patch -p1 -i 0005-fix-compile-warning-with-GCC8.patch \
-  && patch -p1 -i 0006-Fix-FTBFS-under-GCC-9.patch \
+  && patch -p1 -i debian/patches/0005-fix-compile-warning-with-GCC8.patch \
+  && patch -p1 -i debian/patches/0006-Fix-FTBFS-under-GCC-9.patch \
   && ./autogen.sh \
-  && ./configure --disable-documentation --disable-dependency-tracking --disable-maintainer-mode --disable-ssp \
+  && CFLAGS="-D_FORTIFY_SOURCE=2 -fstack-protector-strong -fPIE -pie -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now" ./configure --disable-documentation --disable-dependency-tracking --disable-maintainer-mode --disable-ssp --disable-silent-rules \
   && make && make install \
   && strip -s /usr/local/bin/obfs-* \
   && cd /tmp \
