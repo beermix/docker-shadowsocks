@@ -25,7 +25,7 @@ RUN apk upgrade --update \
   && patch -p1 -i 0005-fix-compile-warning-with-GCC8.patch \
   && patch -p1 -i 0006-Fix-FTBFS-under-GCC-9.patch \
   && ./autogen.sh \
-  && ./configure --disable-documentation --disable-dependency-tracking --disable-ssp \
+  && ./configure --disable-documentation --disable-dependency-tracking --disable-maintainer-mode --disable-ssp \
   && make && make install \
   && strip -s /usr/local/bin/obfs-* \
   && cd /tmp \
