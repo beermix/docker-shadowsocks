@@ -1,48 +1,9 @@
 FROM archlinux
 
-ENV SHADOWSOCKS_VERSION master
-ENV KCPTUN_VERSION 20200226
-ENV SIMPLE_OBFS_VERSION master
-ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
-# ENV SHADOWSOCKS_URL https://salsa.debian.org/bridges-team/shadowsocks-libev.git
-ENV SIMPLE_OBFS_URL https://salsa.debian.org/bridges-team/simple-obfs.git
-ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
-
 ADD pacman.conf /etc/pacman.conf
 ADD mirrorlist  /etc/pacman.d/mirrorlist
 
-RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S git cmake autoconf automake gcc binutils libtool make pkgconf libtool curl git flex bison gawk sed libcap udns pcre mbedtls libsodium c-ares libev libcorkipset libbloom linux-headers patch gettext pax-utils \
-  && cd /tmp \
-  && git clone --depth 1 $SHADOWSOCKS_URL \
-  && cd shadowsocks-libev \
-  && CPPFLAGS="-D_FORTIFY_SOURCE=2" CFLAGS="-march=native -O2 -pipe -fno-plt" CXXFLAGS="-march=native -O2 -pipe -fno-plt" LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=1 \
-  && make install \
-  && strip -s /usr/bin/ss-* \
-  && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
-  && cd /tmp \
-  && git clone --depth 1 $SIMPLE_OBFS_URL \
-  && cd simple-obfs \
-  && patch -p1 -i debian/patches/0001-Use-libcork-dev-in-system.patch \
-  && patch -p1 -i debian/patches/0005-fix-compile-warning-with-GCC8.patch \
-  && patch -p1 -i debian/patches/0006-Fix-FTBFS-under-GCC-9.patch \
-  && ./autogen.sh \a
-  && CPPFLAGS="-D_FORTIFY_SOURCE=2" CFLAGS="-march=native -O2 -pipe -fno-plt" CXXFLAGS="-march=native -O2 -pipe -fno-plt" LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now" ./configure --disable-documentation --disable-ssp --disable-silent-rules \
-  && make install \
-  && strip -s /usr/local/bin/obfs-* \
-  && cd /tmp \
-  && curl -sSLO $KCPTUN_URL \
-  && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
-  && mv server_linux_amd64 /usr/bin/kcptun-server \
-  && mv client_linux_amd64 /usr/bin/kcptun-client \
-  && runDeps="$( \
-      scanelf --needed --nobanner /usr/bin/ss-server /usr/local/bin/obfs-* \
-        | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-        | xargs -r pacman -Qqe \
-        | sort -u \
-      )" \
-  && pacman --noconfirm -S $runDeps ca-certificates rng-tools \
-  && pacman --noconfirm -S bash libcap \
-  && rm -rf /tmp/*
+RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S kcptun simple-obfs shadowsocks-libev
 
 ADD sysctl.conf /etc/sysctl.conf
 ADD entrypoint.sh /entrypoint.sh
