@@ -24,7 +24,7 @@ RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S git cmake aut
   && patch -p1 -i debian/patches/0001-Use-libcork-dev-in-system.patch \
   && patch -p1 -i debian/patches/0005-fix-compile-warning-with-GCC8.patch \
   && patch -p1 -i debian/patches/0006-Fix-FTBFS-under-GCC-9.patch \
-  && ./autogen.sh \a
+  && ./autogen.sh \
   && CPPFLAGS="-D_FORTIFY_SOURCE=2" CFLAGS="-march=native -O2 -pipe -fno-plt" CXXFLAGS="-march=native -O2 -pipe -fno-plt" LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now" ./configure --disable-documentation --disable-ssp --disable-silent-rules \
   && make install \
   && strip -s /usr/local/bin/obfs-* \
