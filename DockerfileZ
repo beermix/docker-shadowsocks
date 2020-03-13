@@ -17,7 +17,7 @@ RUN apk upgrade --update \
   && git checkout $SHADOWSOCKS_VERSION \
   && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
   && ./autogen.sh \
-  && CC=clang CXX=clang++ ./configure --prefix=/usr --disable-documentation --enable-system-shared-lib --disable-silent-rules --disable-ssp \
+  && ./configure --prefix=/usr --disable-documentation --enable-system-shared-lib --disable-assert --disable-ssp \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \

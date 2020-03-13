@@ -7,6 +7,7 @@ ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
 # ENV SHADOWSOCKS_URL https://salsa.debian.org/bridges-team/shadowsocks-libev.git
 ENV SIMPLE_OBFS_URL https://salsa.debian.org/bridges-team/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
+#  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
 
 RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps build-base flex bison alpine-sdk linux-headers ca-certificates \
@@ -15,7 +16,7 @@ RUN apk upgrade --update \
   && cd /tmp \
   && git clone --depth 1 $SHADOWSOCKS_URL \
   && cd shadowsocks-libev \
-  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
+  && ./autogen.sh; ./configure --prefix=/usr --disable-documentation --enable-system-shared-lib --disable-assert --disable-ssp \
   && make && make install \
   && strip -s /usr/bin/ss-* \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
