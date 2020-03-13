@@ -26,7 +26,7 @@ RUN apk upgrade --update \
   && cd simple-obfs \
   && patch -p1 -i debian/patches/0001-Use-libcork-dev-in-system.patch \
   && ./autogen.sh \
-  && ./configure --disable-documentation \
+  && ./configure --disable-documentation --disable-ssp \
   && make install \
   && strip -s /usr/local/bin/obfs-* \
   && cd /tmp \
