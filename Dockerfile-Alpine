@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:edge
 
 ENV SHADOWSOCKS_VERSION 3.3.4
 ENV SIMPLE_OBFS_VERSION 486bebd
@@ -17,7 +17,7 @@ RUN apk upgrade --update \
   && cd shadowsocks-libev \
   && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
   && ./autogen.sh \
-  && ./configure --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib \
+  && ./configure --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-assert --disable-ssp \
   && make && make install \
   && strip -s /usr/bin/ss-server \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
@@ -25,7 +25,7 @@ RUN apk upgrade --update \
   && git clone --recursive --depth 1 $SIMPLE_OBFS_URL \
   && cd simple-obfs \
   && ./autogen.sh \
-  && ./configure --disable-documentation \
+  && ./configure --disable-documentation --disable-assert --disable-ssp \
   && make && make install \
   && strip -s /usr/local/bin/obfs-* \
   && cd /tmp \
