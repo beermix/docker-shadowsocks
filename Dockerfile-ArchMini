@@ -3,7 +3,7 @@ FROM archlinux
 ADD pacman.conf /etc/pacman.conf
 ADD mirrorlist  /etc/pacman.d/mirrorlist
 
-RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S kcptun simple-obfs shadowsocks-libev
+RUN pacman -Sy && pacman -Suy --noconfirm && pacman --noconfirm -S kcptun simple-obfs shadowsocks-libev ca-certificates rng-tools bash
 
 ADD sysctl.conf /etc/sysctl.conf
 ADD entrypoint.sh /entrypoint.sh
