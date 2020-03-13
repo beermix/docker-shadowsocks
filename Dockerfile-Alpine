@@ -7,6 +7,7 @@ ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 #  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
+# && ./configure --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-assert --disable-ssp \
 
 RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps build-base flex bison alpine-sdk linux-headers ca-certificates \
@@ -16,9 +17,8 @@ RUN apk upgrade --update \
   && git clone --depth 1 $SHADOWSOCKS_URL \
   && cd shadowsocks-libev \
   && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
-  && ./autogen.sh \
-  && ./configure --prefix=/usr --disable-documentation --enable-shared --enable-system-shared-lib --disable-assert --disable-ssp \
-  && make && make install \
+  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
+  && make install \
   && strip -s /usr/bin/ss-server \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
@@ -26,8 +26,8 @@ RUN apk upgrade --update \
   && cd simple-obfs \
   && patch -p1 -i debian/patches/0001-Use-libcork-dev-in-system.patch \
   && ./autogen.sh \
-  && ./configure --disable-documentation --disable-assert --disable-ssp \
-  && make && make install \
+  && ./configure --disable-documentation \
+  && make install \
   && strip -s /usr/local/bin/obfs-* \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
