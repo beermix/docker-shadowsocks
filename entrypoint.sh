@@ -27,5 +27,3 @@ echo "Starting Kcptun Server on udp port $KCPTUN_PORT over $KCPTUN_TARGET_PORT w
 kcptun-server --target "127.0.0.1:$KCPTUN_TARGET_PORT" --listen ":$KCPTUN_PORT" --mode "$KCPTUN_MODE" --key "$KCPTUN_KEY" --crypt "$KCPTUN_CRYPTO" --mtu 1350 --sndwnd 1024 --rcvwnd 1024
 =======
 kcptun-server --target "127.0.0.1:$KCPTUN_TARGET_PORT" --listen ":$KCPTUN_PORT" --mode "$KCPTUN_MODE" --key "$KCPTUN_KEY" --crypt "$KCPTUN_CRYPTO" --mtu 1350 --sndwnd 1024 --rcvwnd 1024 -nocomp -sockbuf 16777217 -dscp 46
-
->>>>>>> bc9815cb6534cac3ee724be4f429d89eb0cca9d4
