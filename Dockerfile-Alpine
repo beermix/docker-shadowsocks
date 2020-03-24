@@ -12,7 +12,7 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSIO
 
 RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps build-base flex bison alpine-sdk linux-headers ca-certificates \
-  udns-dev pcre-dev zlib-dev libcap autoconf automake c-ares-dev libtool git gawk libev-dev mbedtls-static mbedtls-dev libsodium-dev patch curl cmake autoconf-archive \
+  udns-dev pcre-dev zlib-dev libcap autoconf automake c-ares-dev libtool git gawk libev-dev mbedtls-static mbedtls-dev libsodium-dev patch curl cmake \
   && apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing libcorkipset-dev libbloom-dev \
   && cd /tmp \
   && git clone --depth 1 $SHADOWSOCKS_URL \
@@ -22,11 +22,11 @@ RUN apk upgrade --update \
   && strip -s /usr/bin/ss-server \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
-  && git clone --depth 1 $SIMPLE_OBFS_URL \
+  && git clone $SIMPLE_OBFS_URL \
+  && cd simple-obfs \
   && patch -p1 -i debian/patches/0001-Use-libcork-dev-in-system.patch \
   && patch -p1 -i debian/patches/0005-fix-compile-warning-with-GCC8.patch \
   && patch -p1 -i debian/patches/0006-Fix-FTBFS-under-GCC-9.patch \
-  && cd simple-obfs \
   && patch -p1 -i debian/patches/0001-Use-libcork-dev-in-system.patch \
   && ./autogen.sh \
   && ./configure --disable-documentation --disable-dependency-tracking --disable-ssp \
