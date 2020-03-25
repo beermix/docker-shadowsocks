@@ -3,8 +3,8 @@ FROM alpine:edge
 ENV SHADOWSOCKS_VERSION 3.3.4
 ENV SIMPLE_OBFS_VERSION 486bebd
 ENV KCPTUN_VERSION 20200201
-ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev
-#ENV SIMPLE_OBFS_URL https://salsa.debian.org/bridges-team/simple-obfs
+ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
+#ENV SIMPLE_OBFS_URL https://salsa.debian.org/bridges-team/simple-obfs.git
 ENV SIMPLE_OBFS_URL https://salsa.debian.org/bridges-team/simple-obfs.git
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 #  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DWITH_DOC_HTML=0 -DWITH_DOC_MAN=0 -DWITH_EMBEDDED_SRC=0 -DWITH_SS_REDIR=0 -DWITH_STATIC=0 -DCMAKE_VERBOSE_MAKEFILE=0 \
