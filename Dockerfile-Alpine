@@ -24,7 +24,7 @@ RUN apk upgrade --update \
   && cd simple-obfs \
   && patch -p1 -i debian/patches/0001-Use-libcork-dev-in-system.patch \
   && ./autogen.sh \
-  && ./configure --disable-documentation --disable-ssp \
+  && ./configure --disable-documentation --disable-ssp --disable-assert \
   && make install \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
