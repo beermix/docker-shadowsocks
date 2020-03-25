@@ -1,13 +1,12 @@
 FROM alpine
 
-ENV SHADOWSOCKS_VERSION 3.3.4
+ENV SHADOWSOCKS_VERSION master
 ENV SIMPLE_OBFS_VERSION 486bebd
 ENV KCPTUN_VERSION 20200201
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
-#ENV SIMPLE_OBFS_URL https://salsa.debian.org/bridges-team/simple-obfs.git
 ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
-      
+
 RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps build-base flex bison alpine-sdk linux-headers ca-certificates \
   udns-dev pcre-dev zlib-dev libcap autoconf automake c-ares-dev libtool git gawk libev-dev mbedtls-static mbedtls-dev libsodium-dev patch curl cmake \
@@ -33,8 +32,9 @@ RUN apk upgrade --update \
   && mv client_linux_amd64 /usr/bin/kcptun-client \
   && runDeps="$( \
       scanelf --needed --nobanner /usr/bin/ss-* /usr/local/bin/obfs-* \
-       | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-       | sort -u) \
+        | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
+        | xargs -r apk info --installed \
+        | sort -u \
       )" \
   && apk add --virtual .run-deps $runDeps ca-certificates rng-tools libsodium tzdata \
   && apk add --virtual .sys-deps bash \

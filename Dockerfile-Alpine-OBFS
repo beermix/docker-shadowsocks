@@ -2,7 +2,7 @@ FROM alpine
 
 ENV SHADOWSOCKS_VERSION master
 ENV SIMPLE_OBFS_VERSION 486bebd
-ENV KCPTUN_VERSION 20200226
+ENV KCPTUN_VERSION 20200201
 ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
 # ENV SHADOWSOCKS_URL https://salsa.debian.org/bridges-team/shadowsocks-libev.git
 ENV SIMPLE_OBFS_URL https://salsa.debian.org/bridges-team/simple-obfs.git
@@ -42,7 +42,7 @@ RUN apk upgrade --update \
         | xargs -r apk info --installed \
         | sort -u \
       )" \
-  && apk add --virtual .run-deps $runDeps ca-certificates rng-tools libsodium \
+  && apk add --virtual .run-deps $runDeps ca-certificates rng-tools libsodium tzdata \
   && apk add --virtual .sys-deps bash \
   && apk del .build-deps \
   && rm -rf /tmp/* /var/cache/apk/*
