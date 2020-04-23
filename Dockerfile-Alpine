@@ -23,6 +23,7 @@ RUN apk upgrade --update \
   && ./autogen.sh \
   && ./configure --disable-documentation --disable-ssp \
   && make install \
+  && ls /usr/local/bin/obfs-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
   && curl -sSLO $KCPTUN_URL \
   && tar xfz kcptun-linux-amd64-${KCPTUN_VERSION}.tar.gz \
