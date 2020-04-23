@@ -3,12 +3,12 @@ FROM alpine:edge
 ENV SHADOWSOCKS_VERSION master
 ENV SIMPLE_OBFS_VERSION master
 ENV KCPTUN_VERSION 20200409
-ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev.git
-ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs.git
+ENV SHADOWSOCKS_URL https://github.com/shadowsocks/shadowsocks-libev
+ENV SIMPLE_OBFS_URL https://github.com/shadowsocks/simple-obfs
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v$KCPTUN_VERSION/kcptun-linux-amd64-$KCPTUN_VERSION.tar.gz
 
 RUN apk upgrade --update \
-  && apk add --no-cache --virtual .build-deps build-base flex bison alpine-sdk linux-headers ca-certificates \
+  && apk add --no-cache --virtual .build-deps build-base linux-headers ca-certificates \
   udns-dev pcre-dev zlib-dev libcap autoconf automake c-ares-dev libtool git gawk flex bison libev-dev mbedtls-static mbedtls-dev libsodium-dev patch curl \
   && cd /tmp \
   && git clone --recursive --depth 1 $SHADOWSOCKS_URL \
