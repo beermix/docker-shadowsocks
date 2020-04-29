@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine
 
 ENV SHADOWSOCKS_VERSION master
 ENV SIMPLE_OBFS_VERSION master
