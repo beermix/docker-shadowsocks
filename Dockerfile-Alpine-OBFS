@@ -14,6 +14,7 @@ RUN apk upgrade --update \
   && cd /tmp \
   && git clone --depth 1 $SHADOWSOCKS_URL \
   && cd shadowsocks-libev \
+  && sed -i 's|AC_CONFIG_FILES(\[libbloom/Makefile libcork/Makefile libipset/Makefile\])||' configure.ac \
   && ./autogen.sh \
   && ./configure --prefix=/usr --disable-documentation --enable-system-shared-lib --disable-ssp \
   && make && make install \
