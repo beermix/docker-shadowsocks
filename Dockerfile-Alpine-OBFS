@@ -11,16 +11,15 @@ RUN apk upgrade --update \
   && apk add --no-cache --virtual .build-deps build-base linux-headers ca-certificates \
   udns-dev pcre-dev zlib-dev libcap autoconf automake c-ares-dev libtool git gawk libev-dev mbedtls-static mbedtls-dev libsodium-dev patch curl \
   && cd /tmp \
-  && git clone --depth 1 $SHADOWSOCKS_URL \
+  && git clone --depth 1 --recursive $SHADOWSOCKS_URL \
   && cd shadowsocks-libev \
   && ./autogen.sh \
   && ./configure --prefix=/usr --disable-documentation --disable-ssp \
   && make install \
   && ls /usr/bin/ss-* | xargs -n1 setcap cap_net_bind_service+ep \
   && cd /tmp \
-  && git clone --depth 1 $SIMPLE_OBFS_URL \
+  && git clone --depth 1 --recursive $SIMPLE_OBFS_URL \
   && cd simple-obfs \
-  && patch -p1 -i debian/patches/0001-Use-libcork-dev-in-system.patch \
   && ./autogen.sh \
   && ./configure --disable-documentation --disable-ssp \
   && make install \
